@@ -12,13 +12,13 @@
 package com.tencent.bk.sdk.iam.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmContentDTO;
 import com.tencent.bk.sdk.iam.dto.manager.AuthorizationScopes;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerScopes;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Builder
 @Data
@@ -75,5 +75,5 @@ public class GradeManagerApplicationCreateDTO {
     /*
      * 透传到ITSM审批单的内容, 默认为空
      * */
-    private Map<String, String> content;
+    private ItsmContentDTO content;
 }

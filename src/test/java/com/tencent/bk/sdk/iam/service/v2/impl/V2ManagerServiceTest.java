@@ -22,8 +22,12 @@ import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionGroupDTO;
 import com.tencent.bk.sdk.iam.dto.action.GroupAction;
-import com.tencent.bk.sdk.iam.dto.application.ApplicationDTO;
-import com.tencent.bk.sdk.iam.dto.application.ApplicationVO;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmAttrs;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmColumn;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmContentDTO;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmScheme;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmStyle;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmValue;
 import com.tencent.bk.sdk.iam.dto.manager.Action;
 import com.tencent.bk.sdk.iam.dto.manager.AuthorizationScopes;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerMember;
@@ -174,16 +178,16 @@ public class V2ManagerServiceTest {
         ManagerScopes department = new ManagerScopes("user", "greysonfang");
         AuthorizationScopes resources = AuthorizationScopes.builder()
             .system("bk_ci")
-            .actions(Arrays.asList(new Action("all_action")))
+            .actions(Arrays.asList(new Action("project_view")))
             .resources(
                 Arrays.asList(ManagerResources
                     .builder()
                     .system("bk_ci")
                     .type("project")
-                    .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci", "project", "fc-test", "test-greysonfang-v2"))))
+                    .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci", "project", "fc-test-rbac11", "fc-test-rbac11"))))
                     .build()))
             .build();
-        CreateManagerDTO test1 = CreateManagerDTO.builder().system("bk_ci").name("greysonfang-v2").description("test")
+        CreateManagerDTO test1 = CreateManagerDTO.builder().system("bk_ci").name("fc-test-rbac1121").description("fc-test-rbac11")
             .members(Arrays.asList("greysonfang"))
             .authorization_scopes(Arrays.asList(resources))
             .subject_scopes(Arrays.asList(department)).build();
@@ -315,9 +319,10 @@ public class V2ManagerServiceTest {
     @Test
     public void testCreateRoleGroupApplicationV2() {
         Long expiredTime = System.currentTimeMillis() / 1000 + TimeUnit.DAYS.toSeconds(10);
-        ApplicationDTO applicationDTO = ApplicationDTO.builder().groupId(Arrays.asList(10125)).expiredAt(expiredTime).applicant("greysonfang").reason("test").build();
-        ApplicationVO roleGroupApplicationV2 = v2ManagerService.createRoleGroupApplicationV2(applicationDTO);
-        System.out.println(roleGroupApplicationV2);
+        System.out.println(expiredTime);
+//        ApplicationDTO applicationDTO = ApplicationDTO.builder().groupId(Arrays.asList(10125)).expiredAt(expiredTime).applicant("greysonfang").reason("test").build();
+//        ApplicationVO roleGroupApplicationV2 = v2ManagerService.createRoleGroupApplicationV2(applicationDTO);
+//        System.out.println(roleGroupApplicationV2);
     }
 
     @Test
@@ -376,9 +381,29 @@ public class V2ManagerServiceTest {
                     .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci", "project", "fc-test", "test-greysonfang-v2"))))
                     .build()))
             .build();
-        HashMap<String, String> content = new HashMap<>();
-        content.put("test", "test");
-        GradeManagerApplicationCreateDTO build = GradeManagerApplicationCreateDTO.builder().name("test-0").description("123")
+        List<ItsmColumn> itsmColumns = Arrays.asList(
+            ItsmColumn.builder().key("projectName").name("项目名称").type("text").build(),
+            ItsmColumn.builder().key("projectId").name("项目ID").type("text").build(),
+            ItsmColumn.builder().key("desc").name("项目描述").type("text").build(),
+            ItsmColumn.builder().key("organization").name("所属组织").type("text").build(),
+            ItsmColumn.builder().key("authSecrecy").name("项目性质").type("text").build(),
+            ItsmColumn.builder().key("subjectScopes").name("最大可授权人员范围").type("text").width(100).build()
+        );
+        ItsmAttrs itsmAttrs = ItsmAttrs.builder().column(itsmColumns).build();
+        ItsmScheme itsmScheme = ItsmScheme.builder().attrs(itsmAttrs).type("table").build();
+        HashMap<String, ItsmScheme> scheme = new HashMap<>();
+        scheme.put("content_table", itsmScheme);
+        HashMap<String, ItsmStyle> value = new HashMap<>();
+        value.put("projectName",ItsmStyle.builder().value("test").build());
+        value.put("projectId",ItsmStyle.builder().value("test").build());
+        value.put("desc",ItsmStyle.builder().value("test").build());
+        value.put("organization",ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
+        ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
+
+        GradeManagerApplicationCreateDTO build = GradeManagerApplicationCreateDTO.builder().name("fc-test-rbac412126").description("fc-test-rbac121241")
             .members(Arrays.asList("greysonfang"))
             .authorizationScopes(Arrays.asList(resources))
             .subjectScopes(Arrays.asList(department))
@@ -386,7 +411,7 @@ public class V2ManagerServiceTest {
             .reason("just test")
             .callbackId("123")
             .callbackUrl("xxx")
-            .content(content)
+            .content(itsmContentDTO)
             .title("fc-test").build();
         // GradeManagerApplicationResponse(id=604, sn=REQ20221122000028)
         GradeManagerApplicationResponse gradeManagerApplication = v2ManagerService.createGradeManagerApplication(build);
@@ -414,8 +439,27 @@ public class V2ManagerServiceTest {
                     .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci", "project", "fc-test", "test-greysonfang-v1"))))
                     .build()))
             .build();
-        HashMap<String, String> content = new HashMap<>();
-        content.put("test", "test");
+        List<ItsmColumn> itsmColumns = Arrays.asList(
+            ItsmColumn.builder().key("projectName").name("项目名称").type("text").build(),
+            ItsmColumn.builder().key("projectId").name("项目ID").type("text").build(),
+            ItsmColumn.builder().key("desc").name("项目描述").type("text").build(),
+            ItsmColumn.builder().key("organization").name("所属组织").type("text").build(),
+            ItsmColumn.builder().key("authSecrecy").name("项目性质").type("text").build(),
+            ItsmColumn.builder().key("subjectScopes").name("最大可授权人员范围").type("text").width(100).build()
+        );
+        ItsmAttrs itsmAttrs = ItsmAttrs.builder().column(itsmColumns).build();
+        ItsmScheme itsmScheme = ItsmScheme.builder().attrs(itsmAttrs).type("table").build();
+        HashMap<String, ItsmScheme> scheme = new HashMap<>();
+        scheme.put("content_table", itsmScheme);
+        HashMap<String, ItsmStyle> value = new HashMap<>();
+        value.put("projectName",ItsmStyle.builder().value("test").build());
+        value.put("projectId",ItsmStyle.builder().value("test").build());
+        value.put("desc",ItsmStyle.builder().value("test").build());
+        value.put("organization",ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
+        ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
         GradeManagerApplicationUpdateDTO build = GradeManagerApplicationUpdateDTO.builder().name("test-134").description("123")
             .members(Arrays.asList("greysonfang"))
             .authorizationScopes(Arrays.asList(resources))
@@ -424,7 +468,7 @@ public class V2ManagerServiceTest {
             .reason("just test")
             .callbackId("1234")
             .callbackUrl("xxx")
-            .content(content)
+            .content(itsmContentDTO)
             .title("fc-test").build();
 
         GradeManagerApplicationResponse gradeManagerApplication = v2ManagerService.updateGradeManagerApplication("3153", build);
@@ -432,7 +476,7 @@ public class V2ManagerServiceTest {
     }
 
     @Test
-    public void testGetGradeManagerDetail(){
+    public void testGetGradeManagerDetail() {
         System.out.println(v2ManagerService.getGradeManagerDetail("3156"));
     }
 }

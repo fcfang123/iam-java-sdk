@@ -77,7 +77,6 @@ public interface V2ManagerService {
      */
     public GradeManagerApplicationResponse updateGradeManagerApplication(String gradeManagerId,
                                                                          GradeManagerApplicationUpdateDTO gradeManagerApplicationUpdateDTO);
-
     /**
      * 直接创建分级管理员
      **/

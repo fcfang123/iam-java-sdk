@@ -60,7 +60,6 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
         try {
             String jsonBody = JsonUtil.toJson(body);
             log.debug("Post request, uri:{}, body:{}", uri, jsonBody);
-            log.info("iam-sdk doHttpPost jsonBody : {}", jsonBody);
             postRequest.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
         } catch (JsonProcessingException e) {
             log.warn("Json encode failed!|{}|{}|{}", uri, body, e);
@@ -118,13 +117,10 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
         try {
             log.info("doExecuteRequest {}", request);
             CloseableHttpResponse response = httpClient.execute(request);
-            log.info("doExecuteRequest|{}", response);
+            log.info("doExecuteResponse|{}", response);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
-                String requestId = "";
-                if (response.getFirstHeader(REQUEST_ID) != null) {
-                    requestId = response.getFirstHeader(REQUEST_ID).getValue();
-                }
+                String requestId = response.getFirstHeader(REQUEST_ID).getValue();
                 String responseString = response.getEntity() == null ? null : EntityUtils.toString(response.getEntity(), Consts.UTF_8);
                 log.info("Http response|{}|{}|{}", statusCode, requestId, responseString);
                 return responseString;
@@ -147,7 +143,6 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
     private void buildAuthHeader(HttpRequestBase httpRequest) {
         Map<String, String> header = new HashMap<>();
         try {
-            log.info("buildAuthHeader appcode:{}", iamConfiguration.getAppCode());
             header.put(HttpHeader.APIGW_BK_APP_CODE, iamConfiguration.getAppCode());
             header.put(HttpHeader.APIGW_BK_APP_SECRET, iamConfiguration.getAppSecret());
             String headerStr = JsonUtil.toJson(header);

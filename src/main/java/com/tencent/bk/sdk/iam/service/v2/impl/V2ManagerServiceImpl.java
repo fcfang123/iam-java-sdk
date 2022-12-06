@@ -611,7 +611,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                 }
-                if (StringUtils.isNotBlank(responseInfo.getMessage()) && responseInfo.getMessage().equals("ok"))
+                if (StringUtils.isNotBlank(responseInfo.getMessage()) && responseInfo.getMessage().equals("OK"))
                     return true;
             } else {
                 log.warn("cancelCallbackApplication got empty response!");
