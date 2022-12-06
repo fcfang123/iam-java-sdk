@@ -97,3 +97,5 @@ tasks.withType(JavaCompile) {
 
 group "com.tencent.bk.sdk"
 version "${iamVersion}"
+
+apply from: "task_deploy_to_maven.gradle"
