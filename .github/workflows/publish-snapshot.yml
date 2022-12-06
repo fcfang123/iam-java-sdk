@@ -47,7 +47,6 @@ jobs:
           build_mavenRepoPassword: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
           echo "GITHUB_REF=${GITHUB_REF}"
-          core_version=${GITHUB_REF##*/v}
           chmod +x ./gradlew
           ./gradlew clean publish -Dsnapshot=true \
           -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} \
