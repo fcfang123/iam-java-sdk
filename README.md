@@ -22,8 +22,18 @@ iam-java-sdk 是蓝鲸权限中心(BK-IAM)提供的用于快速接入权限体�
 
 ### Installation
 
+### maven
+```
+<dependency>
+  <groupId>com.tencent.bk.sdk</groupId>
+  <artifactId>iam-java-sdk</artifactId>
+  <version>${version}</version>
+</dependency>
 ```
 
+#### gradle
+```
+implementation "com.tencent.bk.sdk:iam-java-sdk:${version}"
 ```
 
 ### Usage
