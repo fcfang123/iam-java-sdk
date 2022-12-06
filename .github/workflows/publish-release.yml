@@ -47,12 +47,11 @@ jobs:
           build_mavenRepoPassword: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
           echo "GITHUB_REF=${GITHUB_REF}"
-          core_version=${GITHUB_REF##*/v}
           chmod +x ./gradlew
           ./gradlew clean publish \
           -Psigning.keyId=${{ secrets.SIGNING_KEY_ID }} \
           -Psigning.password='${{ secrets.SIGNING_PASSWORD }}' \
-          -Psigning.secretKeyRingFile=${{ github.workspace }}/secretKeyRingFile.gpg"
+          -Psigning.secretKeyRingFile=${{ github.workspace }}/secretKeyRingFile.gpg
       - name: Clean Up
         if: ${{ always() }}
         run: |
