@@ -394,12 +394,12 @@ public class V2ManagerServiceTest {
         HashMap<String, ItsmScheme> scheme = new HashMap<>();
         scheme.put("content_table", itsmScheme);
         HashMap<String, ItsmStyle> value = new HashMap<>();
-        value.put("projectName",ItsmStyle.builder().value("test").build());
-        value.put("projectId",ItsmStyle.builder().value("test").build());
-        value.put("desc",ItsmStyle.builder().value("test").build());
-        value.put("organization",ItsmStyle.builder().value("test").build());
-        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
-        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        value.put("projectName", ItsmStyle.builder().value("test").build());
+        value.put("projectId", ItsmStyle.builder().value("test").build());
+        value.put("desc", ItsmStyle.builder().value("test").build());
+        value.put("organization", ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy", ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes", ItsmStyle.builder().value("test").build());
         ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
 
@@ -452,12 +452,12 @@ public class V2ManagerServiceTest {
         HashMap<String, ItsmScheme> scheme = new HashMap<>();
         scheme.put("content_table", itsmScheme);
         HashMap<String, ItsmStyle> value = new HashMap<>();
-        value.put("projectName",ItsmStyle.builder().value("test").build());
-        value.put("projectId",ItsmStyle.builder().value("test").build());
-        value.put("desc",ItsmStyle.builder().value("test").build());
-        value.put("organization",ItsmStyle.builder().value("test").build());
-        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
-        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        value.put("projectName", ItsmStyle.builder().value("test").build());
+        value.put("projectId", ItsmStyle.builder().value("test").build());
+        value.put("desc", ItsmStyle.builder().value("test").build());
+        value.put("organization", ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy", ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes", ItsmStyle.builder().value("test").build());
         ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
         GradeManagerApplicationUpdateDTO build = GradeManagerApplicationUpdateDTO.builder().name("test-134").description("123")

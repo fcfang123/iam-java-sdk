@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.IamUri;
+import com.tencent.bk.sdk.iam.constants.V2IamUri;
 import com.tencent.bk.sdk.iam.dto.ExpressionWithResourceDTO;
 import com.tencent.bk.sdk.iam.dto.InstanceDTO;
 import com.tencent.bk.sdk.iam.dto.SubjectDTO;
@@ -56,16 +57,27 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public ExpressionDTO getPolicyByAction(String username, ActionDTO action, List<ResourceDTO> resourceList) {
+        return getPolicyByActionV2(username, action, resourceList, false);
+    }
+
+    @Override
+    public ExpressionDTO getPolicyByActionV2(String username, ActionDTO action, List<ResourceDTO> resourceList, Boolean isV2) {
         if (resourceList == null) {
             resourceList = Collections.emptyList();
         }
         QueryPolicyRequestDTO queryPolicyRequest =
-                QueryPolicyRequestDTO.builder().subject(SubjectDTO.builder().id(username).type("user").build())
-                        .action(action).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
+            QueryPolicyRequestDTO.builder().subject(SubjectDTO.builder().id(username).type("user").build())
+                .action(action).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
         if (log.isDebugEnabled()) {
             log.debug("Get policy by action request|{}|{}|{}|{}", username, action, resourceList, queryPolicyRequest);
         }
-        String policyResponse = httpClientService.doHttpPost(IamUri.QUERY_POLICY, queryPolicyRequest);
+        String url;
+        if (isV2) {
+            url = String.format(V2IamUri.V2_QUERY_POLICY, iamConfiguration.getSystemId());
+        } else {
+            url = IamUri.QUERY_POLICY;
+        }
+        String policyResponse = httpClientService.doHttpPost(url, queryPolicyRequest);
         if (StringUtils.isNotBlank(policyResponse)) {
             if (log.isDebugEnabled()) {
                 log.debug("Get policy by action response|{}", policyResponse);
@@ -73,11 +85,11 @@ public class PolicyServiceImpl implements PolicyService {
             ResponseDTO<ExpressionDTO> responseInfo;
             try {
                 responseInfo = JsonUtil.fromJson(policyResponse,
-                        new TypeReference<ResponseDTO<ExpressionDTO>>() {
-                        });
+                    new TypeReference<ResponseDTO<ExpressionDTO>>() {
+                    });
             } catch (IOException e) {
                 log.error("Error while parse policy response!|{}|{}|{}|{}", username, action, resourceList,
-                        policyResponse, e);
+                    policyResponse, e);
                 return null;
             }
             if (responseInfo != null) {
@@ -94,7 +106,7 @@ public class PolicyServiceImpl implements PolicyService {
     public List<ActionPolicyDTO> batchGetPolicyByActionList(String username, List<ActionDTO> actionList,
                                                             List<ResourceDTO> resourceList) {
         BatchQueryPolicyRequestDTO batchQueryPolicyRequest = BatchQueryPolicyRequestDTO.builder().subject(SubjectDTO.builder().id(username).type("user").build())
-                .actionList(actionList).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
+            .actionList(actionList).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
         if (log.isDebugEnabled()) {
             log.debug("Batch get policy by action list request|{}|{}|{}|{}", username, actionList, resourceList, batchQueryPolicyRequest);
         }
@@ -106,11 +118,11 @@ public class PolicyServiceImpl implements PolicyService {
             ResponseDTO<List<ActionPolicyDTO>> responseInfo;
             try {
                 responseInfo = JsonUtil.fromJson(actionPolicyResponse,
-                        new TypeReference<ResponseDTO<List<ActionPolicyDTO>>>() {
-                        });
+                    new TypeReference<ResponseDTO<List<ActionPolicyDTO>>>() {
+                    });
             } catch (IOException e) {
                 log.error("Error while parse action policy response!|{}|{}|{}|{}", username, actionList, resourceList,
-                        actionPolicyResponse, e);
+                    actionPolicyResponse, e);
                 return null;
             }
             if (responseInfo != null) {
@@ -137,11 +149,11 @@ public class PolicyServiceImpl implements PolicyService {
         queryPolicyWithDependencyResourceRequest.setDependencyResource(dependencyResource);
         if (log.isDebugEnabled()) {
             log.debug("Batch get policy and attr request|{}|{}|{}|{}|{}", username, action, selfResource,
-                    dependencyResource, queryPolicyWithDependencyResourceRequest);
+                dependencyResource, queryPolicyWithDependencyResourceRequest);
         }
 
         String policyAndResourceResponse = httpClientService.doHttpPost(IamUri.QUERY_POLICY_WITH_RESOURCE,
-                queryPolicyWithDependencyResourceRequest);
+            queryPolicyWithDependencyResourceRequest);
         if (StringUtils.isNotBlank(policyAndResourceResponse)) {
             if (log.isDebugEnabled()) {
                 log.debug("Batch get policy and attr response|{}", policyAndResourceResponse);
@@ -152,7 +164,7 @@ public class PolicyServiceImpl implements PolicyService {
                 });
             } catch (IOException e) {
                 log.error("Error while parse action policy response!|{}|{}|{}|{}|{}", username, action, selfResource,
-                        dependencyResource, policyAndResourceResponse, e);
+                    dependencyResource, policyAndResourceResponse, e);
                 return null;
             }
             if (responseInfo != null) {
@@ -165,7 +177,7 @@ public class PolicyServiceImpl implements PolicyService {
                 List<DependencyResourceInfoDTO> dependencyResourceList = policyWithDependencyResource.getDependencyResourceList();
 
                 Map<String, Map<String, List<InstanceDTO>>> instanceMap =
-                        new ConcurrentHashMap<>(dependencyResourceList.size());
+                    new ConcurrentHashMap<>(dependencyResourceList.size());
 
                 for (DependencyResourceInfoDTO dependencyResourceInfo : dependencyResourceList) {
                     if (StringUtils.isBlank(dependencyResourceInfo.getSystem())) {
@@ -177,10 +189,10 @@ public class PolicyServiceImpl implements PolicyService {
                         continue;
                     }
                     Map<String, List<InstanceDTO>> typeResourceMap =
-                            instanceMap.computeIfAbsent(dependencyResourceInfo.getSystem(),
-                                    k -> new ConcurrentHashMap<>(dependencyResourceInfo.getInstanceList().size()));
+                        instanceMap.computeIfAbsent(dependencyResourceInfo.getSystem(),
+                            k -> new ConcurrentHashMap<>(dependencyResourceInfo.getInstanceList().size()));
                     typeResourceMap.put(dependencyResourceInfo.getType(),
-                            dependencyResourceInfo.getInstanceList());
+                        dependencyResourceInfo.getInstanceList());
                 }
                 expressionWithResource.setInstanceMap(instanceMap);
 
@@ -198,7 +210,8 @@ public class PolicyServiceImpl implements PolicyService {
             log.debug("get manager role response|{}", responseStr);
             ResponseDTO<List<UserGroupDTO>> responseInfo = null;
             try {
-                responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<List<UserGroupDTO>>>() {});
+                responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<List<UserGroupDTO>>>() {
+                });
             } catch (IOException e) {
                 e.printStackTrace();
             }

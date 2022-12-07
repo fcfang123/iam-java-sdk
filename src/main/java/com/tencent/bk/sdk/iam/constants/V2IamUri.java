@@ -24,7 +24,6 @@ public class V2IamUri {
     public static final String V2_MANAGER_ROLE_GROUP_MEMBER_GET = "/api/v2/open/management/systems/%s/groups/%s/members/";
     public static final String V2_MANAGER_ROLE_GROUP_MEMBER_DEL = "/api/v2/open/management/systems/%s/groups/%s/members/?type=%s&ids=%s";
     public static final String V2_MANAGER_ROLE_GROUP_MEMBER_RENEWAL = "/api/v2/open/management/systems/%s/groups/%s/members/-/expired_at/";
-    public static final String V2_AUTH_POLICY = "/api/v2/policy/systems/%s/auth/";
     public static final String V2_GRADE_MANAGER_APPLICATION_CREATE = "/api/v2/open/management/systems/%s/grade_managers/-/applications/";
     public static final String V2_GRADE_MANAGER_APPLICATION_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/applications/";
     public static final String V2_CALLBACK_APPLICATION_HANDLE = "/api/v2/open/management/systems/%s/applications/%s/approve/";
@@ -38,4 +37,6 @@ public class V2IamUri {
     public static final String V2_MANAGER_ROLE_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/";
     public static final String V2_MANAGER_ROLE_CREATE = "/api/v2/open/management/systems/%s/grade_managers/";
     public static final String V2_MANAGER_DETAIL_GET = "/api/v2/open/management/systems/%s/grade_managers/%s";
+    public static final String V2_AUTH_POLICY = "/api/v2/policy/systems/%s/auth/";
+    public static final String V2_QUERY_POLICY = "/api/v2/policy/systems/%s/query/";
 }

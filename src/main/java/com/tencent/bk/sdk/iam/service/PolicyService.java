@@ -34,6 +34,18 @@ public interface PolicyService {
                                     List<ResourceDTO> resourceList);
 
     /**
+     * V2根据操作拉取权限表达式
+     *
+     * @param username     用户名
+     * @param action       操作
+     * @param resourceList 相关资源列表
+     * @param isV2 是否v2版本
+     * @return 权限表达式
+     */
+    ExpressionDTO getPolicyByActionV2(String username, ActionDTO action,
+                                      List<ResourceDTO> resourceList, Boolean isV2);
+
+    /**
      * 根据操作列表批量拉取权限表达式
      *
      * @param username     用户名

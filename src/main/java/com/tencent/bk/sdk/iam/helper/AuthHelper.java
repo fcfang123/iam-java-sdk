@@ -305,18 +305,30 @@ public class AuthHelper {
     public boolean isAllowed(String username, String action) {
         ActionDTO actionDTO = new ActionDTO();
         actionDTO.setId(action);
-
         ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
         return expression != null && !new ExpressionDTO().equals(expression);
     }
 
     public boolean isAllowed(String username, String action, InstanceDTO instance) {
-        List<String> allowed = isAllowed(username, action, Collections.singletonList(instance));
-        log.info("isAllowed {}|{}|{}|{}|{}", username, action,instance.getId(), allowed, allowed.contains(instance.getId()));
+        List<String> allowed = isAllowed(username, action, Collections.singletonList(instance), false);
+        log.info("isAllowed {}|{}|{}|{}|{}", username, action, instance.getId(), allowed, allowed.contains(instance.getId()));
         return allowed.contains(instance.getId());
     }
 
-    public List<String> isAllowed(String username, String action, List<InstanceDTO> instanceList) {
+    public boolean isAllowedV2(String username, String action) {
+        ActionDTO actionDTO = new ActionDTO();
+        actionDTO.setId(action);
+        ExpressionDTO expression = policyService.getPolicyByActionV2(username, actionDTO, null, true);
+        return expression != null && !new ExpressionDTO().equals(expression);
+    }
+
+    public boolean isAllowedV2(String username, String action, InstanceDTO instance) {
+        List<String> allowed = isAllowed(username, action, Collections.singletonList(instance), true);
+        log.info("isAllowed {}|{}|{}|{}|{}", username, action, instance.getId(), allowed, allowed.contains(instance.getId()));
+        return allowed.contains(instance.getId());
+    }
+
+    public List<String> isAllowed(String username, String action, List<InstanceDTO> instanceList, Boolean isV2) {
         if (CollectionUtils.isEmpty(instanceList)) {
             return Collections.emptyList();
         }
@@ -326,25 +338,35 @@ public class AuthHelper {
 
         // 本系统资源不传 resource
         ExpressionDTO expression;
-        if (instanceList.get(0).getSystem().equals(iamConfiguration.getSystemId())) {
-            expression = policyService.getPolicyByAction(username,
-                    actionDTO, null);
+        if (isV2) {
+            if (instanceList.get(0).getSystem().equals(iamConfiguration.getSystemId())) {
+                expression = policyService.getPolicyByActionV2(username,
+                    actionDTO, null, true);
+            } else {
+                expression = policyService.getPolicyByActionV2(username,
+                    actionDTO, buildResourceList(instanceList), true);
+            }
         } else {
-            expression = policyService.getPolicyByAction(username,
+            if (instanceList.get(0).getSystem().equals(iamConfiguration.getSystemId())) {
+                expression = policyService.getPolicyByAction(username,
+                    actionDTO, null);
+            } else {
+                expression = policyService.getPolicyByAction(username,
                     actionDTO, buildResourceList(instanceList));
-
+            }
         }
+
         log.debug("Expression for action|{}|{}|{}|{}", username, action, instanceList,
-                expression);
+            expression);
         if (expression == null) {
             return Collections.emptyList();
         }
         List<String> allowedInstanceList =
-                instanceList.parallelStream().filter(instance -> {
-                    Map<String, InstanceDTO> instanceMap = new HashMap<>(1);
-                    instanceMap.put(instance.getType(), instance);
-                    return calculateExpression(instanceMap, expression);
-                }).map(InstanceDTO::getId).distinct().collect(Collectors.toList());
+            instanceList.parallelStream().filter(instance -> {
+                Map<String, InstanceDTO> instanceMap = new HashMap<>(1);
+                instanceMap.put(instance.getType(), instance);
+                return calculateExpression(instanceMap, expression);
+            }).map(InstanceDTO::getId).distinct().collect(Collectors.toList());
         log.debug("Allowed instance list|{}|{}|{}", username, action, allowedInstanceList);
         return allowedInstanceList;
     }
@@ -396,7 +418,7 @@ public class AuthHelper {
                 pageDependencyResource.add(pageResource);
 
                 ExpressionWithResourceDTO pageExpressionWithResource = policyService.batchGetPolicyAndAttribute(username,
-                        actionDTO, null, pageDependencyResource);
+                    actionDTO, null, pageDependencyResource);
 
                 if (page == 0) {
                     expressionWithResource = pageExpressionWithResource;
@@ -420,7 +442,7 @@ public class AuthHelper {
             }
         } else {
             expressionWithResource = policyService.batchGetPolicyAndAttribute(username,
-                    actionDTO, null, dependencyResource);
+                actionDTO, null, dependencyResource);
         }
 
         if (expressionWithResource == null) {
@@ -431,9 +453,9 @@ public class AuthHelper {
         Map<String, Map<String, List<InstanceDTO>>> systemTypeInstanceMap = expressionWithResource.getInstanceMap();
         Map<String, InstanceDTO> instanceMap = new ConcurrentHashMap<>();
         systemTypeInstanceMap.forEach((systemId, typeInstanceMap) ->
-                typeInstanceMap.forEach((type, instanceList) ->
-                        instanceList.forEach(instance ->
-                                instanceMap.put(instance.getId(), instance))));
+            typeInstanceMap.forEach((type, instanceList) ->
+                instanceList.forEach(instance ->
+                    instanceMap.put(instance.getId(), instance))));
 
         boolean pass = true;
         Map<String, InstanceDTO> finalInstanceMap = new ConcurrentHashMap<>();
