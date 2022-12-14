@@ -25,6 +25,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
@@ -65,7 +66,7 @@ public interface V2ManagerService {
      * v2版本
      * 查询分级管理员下用户组列表
      */
-    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, String name, V2PageInfoDTO pageInfoDTO);
+    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO);
 
     /**
      * 创建分级管理员申请

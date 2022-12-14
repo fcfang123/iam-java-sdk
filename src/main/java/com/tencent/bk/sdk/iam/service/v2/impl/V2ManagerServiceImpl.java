@@ -29,6 +29,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.CreateVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
@@ -442,12 +443,10 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, String name, V2PageInfoDTO pageInfoDTO) {
+    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO) {
         try {
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
-            if (name != null) {
-                url += "&name=" + name;
-            }
+            buildSearchGroupUrl(searchGroupDTO, url);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("get subeset manager role group response|{}", responseStr);
@@ -471,10 +470,28 @@ public class V2ManagerServiceImpl implements V2ManagerService {
         return null;
     }
 
+    private String buildSearchGroupUrl(SearchGroupDTO searchGroupDTO, String url) {
+        if (searchGroupDTO.getInherit() != null)
+            url = url.concat("&inherit=" + searchGroupDTO.getInherit());
+        if (searchGroupDTO.getActionId() != null)
+            url = url.concat("&action_id=" + searchGroupDTO.getActionId());
+        if (searchGroupDTO.getResourceTypeSystemId() != null)
+            url = url.concat("&resource_type_system_id=" + searchGroupDTO.getResourceTypeSystemId());
+        if (searchGroupDTO.getResourceTypeId() != null)
+            url = url.concat("&resource_type_id=" + searchGroupDTO.getResourceTypeId());
+        if (searchGroupDTO.getBkIamPath() != null)
+            url = url.concat("&bk_iam_path=" + searchGroupDTO.getBkIamPath());
+        if (searchGroupDTO.getName() != null)
+            url = url.concat("&name=" + searchGroupDTO.getName());
+        if (searchGroupDTO.getId() != null)
+            url = url.concat("&id=" + searchGroupDTO.getId());
+        return url;
+    }
+
     @Override
     public GradeManagerApplicationResponse createGradeManagerApplication(GradeManagerApplicationCreateDTO gradeManagerApplicationCreateDTO) {
         try {
-            log.info("iam-sdk gradeManagerApplicationCreateDTO : {}",gradeManagerApplicationCreateDTO);
+            log.info("iam-sdk gradeManagerApplicationCreateDTO : {}", gradeManagerApplicationCreateDTO);
             String url = String.format(V2IamUri.V2_GRADE_MANAGER_APPLICATION_CREATE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, gradeManagerApplicationCreateDTO);
             if (StringUtils.isNotBlank(responseStr)) {
