@@ -13,7 +13,6 @@ package com.tencent.bk.sdk.iam.service.v2.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
-import com.tencent.bk.sdk.iam.constants.IamUri;
 import com.tencent.bk.sdk.iam.constants.V2IamUri;
 import com.tencent.bk.sdk.iam.dto.CallbackApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
@@ -42,8 +41,8 @@ import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
+import com.tencent.bk.sdk.iam.util.HttpUtils;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
-import com.tencent.bk.sdk.iam.util.OkhttpUtils;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -448,7 +447,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
         try {
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
             if (searchGroupDTO != null) {
-                String s = OkhttpUtils.joinParams(OkhttpUtils.objectToMap(searchGroupDTO));
+                String s = HttpUtils.joinParams(searchGroupDTO);
                 url = url.concat("&".concat(s));
             }
             String responseStr = apigwHttpClientService.doHttpGet(url);
