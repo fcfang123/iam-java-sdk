@@ -43,6 +43,7 @@ import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
+import com.tencent.bk.sdk.iam.util.OkhttpUtils;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -446,7 +447,10 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO) {
         try {
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
-            buildSearchGroupUrl(searchGroupDTO, url);
+            if (searchGroupDTO != null) {
+                String s = OkhttpUtils.joinParams(OkhttpUtils.objectToMap(searchGroupDTO));
+                url = url.concat("&".concat(s));
+            }
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("get subeset manager role group response|{}", responseStr);
@@ -468,24 +472,6 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw new RuntimeException(e);
         }
         return null;
-    }
-
-    private String buildSearchGroupUrl(SearchGroupDTO searchGroupDTO, String url) {
-        if (searchGroupDTO.getInherit() != null)
-            url = url.concat("&inherit=" + searchGroupDTO.getInherit());
-        if (searchGroupDTO.getActionId() != null)
-            url = url.concat("&action_id=" + searchGroupDTO.getActionId());
-        if (searchGroupDTO.getResourceTypeSystemId() != null)
-            url = url.concat("&resource_type_system_id=" + searchGroupDTO.getResourceTypeSystemId());
-        if (searchGroupDTO.getResourceTypeId() != null)
-            url = url.concat("&resource_type_id=" + searchGroupDTO.getResourceTypeId());
-        if (searchGroupDTO.getBkIamPath() != null)
-            url = url.concat("&bk_iam_path=" + searchGroupDTO.getBkIamPath());
-        if (searchGroupDTO.getName() != null)
-            url = url.concat("&name=" + searchGroupDTO.getName());
-        if (searchGroupDTO.getId() != null)
-            url = url.concat("&id=" + searchGroupDTO.getId());
-        return url;
     }
 
     @Override
