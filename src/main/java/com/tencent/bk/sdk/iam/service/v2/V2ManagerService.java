@@ -25,13 +25,16 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -65,7 +68,7 @@ public interface V2ManagerService {
      * v2版本
      * 查询分级管理员下用户组列表
      */
-    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, String name, V2PageInfoDTO pageInfoDTO);
+    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO);
 
     /**
      * 创建分级管理员申请
@@ -153,6 +156,10 @@ public interface V2ManagerService {
      */
     public List<GroupAction> getRoleGroupActionV2(Integer groupId);
 
+    /**
+     * 查询用户组权限详情
+     */
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId);
 
     /**
      * 校验用户是否某个用户组的有效成员

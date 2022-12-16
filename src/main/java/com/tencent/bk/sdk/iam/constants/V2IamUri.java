@@ -18,6 +18,7 @@ public class V2IamUri {
     public static final String V2_MANAGER_ROLE_GROUP_GRANT = "/api/v2/open/management/systems/%s/groups/%s/policies/";
     public static final String V2_MANAGER_ROLE_GROUP_ACTION_DEL = "/api/v2/open/management/systems/%s/groups/%s/actions/-/policies/";
     public static final String V2_MANAGER_ROLE_GROUP_ACTION_GET = "/api/v2/open/management/systems/%s/groups/%s/policies/-/actions/";
+    public static final String V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET = "/api/v2/open/management/systems/%s/groups/%s/policies/";
     public static final String V2_MANAGER_ROLE_GROUP_APPLICATIONS_CREATE = "/api/v2/open/management/systems/%s/groups/-/applications/";
     public static final String V2_MANAGER_ROLE_GROUP_BELONG = "/api/v2/open/management/systems/%s/users/%s/groups/belong/?groups=%s&inherit=%s";
     public static final String V2_MANAGER_ROLE_GROUP_MEMBER_CREATE = "/api/v2/open/management/systems/%s/groups/%s/members/";

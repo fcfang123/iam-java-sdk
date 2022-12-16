@@ -13,7 +13,6 @@ package com.tencent.bk.sdk.iam.service.v2.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
-import com.tencent.bk.sdk.iam.constants.IamUri;
 import com.tencent.bk.sdk.iam.constants.V2IamUri;
 import com.tencent.bk.sdk.iam.dto.CallbackApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
@@ -29,6 +28,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.CreateVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
@@ -36,11 +36,13 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
+import com.tencent.bk.sdk.iam.util.HttpUtils;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -281,6 +283,32 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId) {
+        String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET, iamConfiguration.getSystemId(), groupId);
+        try {
+            String responseStr = apigwHttpClientService.doHttpGet(url);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("get Group Permission Detail response|{}", responseStr);
+                ResponseDTO<List<GroupPermissionDetailResponseDTO>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<List<GroupPermissionDetailResponseDTO>>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData();
+                }
+            } else {
+                log.warn("get Group Permission Detail got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("get Group Permission Detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("get Group Permission Detail failed|{}", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
     public GroupMemberVerifyResponse verifyGroupValidMember(String userId, String groupIds) {
         try {
             String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_MEMBER, iamConfiguration.getSystemId(), userId, groupIds);
@@ -442,11 +470,12 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, String name, V2PageInfoDTO pageInfoDTO) {
+    public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO) {
         try {
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
-            if (name != null) {
-                url += "&name=" + name;
+            if (searchGroupDTO != null) {
+                String s = HttpUtils.joinParams(searchGroupDTO);
+                url = url.concat("&".concat(s));
             }
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -474,7 +503,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public GradeManagerApplicationResponse createGradeManagerApplication(GradeManagerApplicationCreateDTO gradeManagerApplicationCreateDTO) {
         try {
-            log.info("iam-sdk gradeManagerApplicationCreateDTO : {}",gradeManagerApplicationCreateDTO);
+            log.info("iam-sdk gradeManagerApplicationCreateDTO : {}", gradeManagerApplicationCreateDTO);
             String url = String.format(V2IamUri.V2_GRADE_MANAGER_APPLICATION_CREATE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, gradeManagerApplicationCreateDTO);
             if (StringUtils.isNotBlank(responseStr)) {

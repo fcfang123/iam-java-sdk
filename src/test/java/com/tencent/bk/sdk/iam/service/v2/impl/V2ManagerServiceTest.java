@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.service.v2.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationUpdateDTO;
@@ -39,12 +40,14 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceCreatorActionsDTO;
 import com.tencent.bk.sdk.iam.dto.resource.V2ResourceNode;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.service.IamActionService;
 import com.tencent.bk.sdk.iam.service.IamResourceService;
@@ -59,6 +62,7 @@ import com.tencent.bk.sdk.iam.service.impl.ResourceServiceImpl;
 import com.tencent.bk.sdk.iam.service.impl.SystemServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
 import com.tencent.bk.sdk.iam.service.v2.V2PolicyService;
+import com.tencent.bk.sdk.iam.util.JsonUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -155,7 +159,7 @@ public class V2ManagerServiceTest {
 
     @Test
     public void testV2GetRoleGroupAction() {
-        List<GroupAction> groupActions = v2ManagerService.getRoleGroupActionV2(10125);
+        List<GroupAction> groupActions = v2ManagerService.getRoleGroupActionV2(10429);
         System.out.println(groupActions);
     }
 
@@ -363,7 +367,12 @@ public class V2ManagerServiceTest {
         V2PageInfoDTO v2PageInfoDTO = new V2PageInfoDTO();
         v2PageInfoDTO.setPage(1);
         v2PageInfoDTO.setPageSize(100);
-        V2ManagerRoleGroupVO gradeManagerRoleGroupV2 = v2ManagerService.getGradeManagerRoleGroupV2("3156", "testfc1", v2PageInfoDTO);
+        SearchGroupDTO pipeline_edit = SearchGroupDTO.builder()
+            .resourceId("greysonfang-test-41")
+            .resourceTypeId("project")
+            .resourceTypeSystemId("bk_ci_rbac")
+            .build();
+        V2ManagerRoleGroupVO gradeManagerRoleGroupV2 = v2ManagerService.getGradeManagerRoleGroupV2("3238", pipeline_edit, v2PageInfoDTO);
         System.out.println(gradeManagerRoleGroupV2);
     }
 
@@ -394,12 +403,12 @@ public class V2ManagerServiceTest {
         HashMap<String, ItsmScheme> scheme = new HashMap<>();
         scheme.put("content_table", itsmScheme);
         HashMap<String, ItsmStyle> value = new HashMap<>();
-        value.put("projectName",ItsmStyle.builder().value("test").build());
-        value.put("projectId",ItsmStyle.builder().value("test").build());
-        value.put("desc",ItsmStyle.builder().value("test").build());
-        value.put("organization",ItsmStyle.builder().value("test").build());
-        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
-        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        value.put("projectName", ItsmStyle.builder().value("test").build());
+        value.put("projectId", ItsmStyle.builder().value("test").build());
+        value.put("desc", ItsmStyle.builder().value("test").build());
+        value.put("organization", ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy", ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes", ItsmStyle.builder().value("test").build());
         ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
 
@@ -452,12 +461,12 @@ public class V2ManagerServiceTest {
         HashMap<String, ItsmScheme> scheme = new HashMap<>();
         scheme.put("content_table", itsmScheme);
         HashMap<String, ItsmStyle> value = new HashMap<>();
-        value.put("projectName",ItsmStyle.builder().value("test").build());
-        value.put("projectId",ItsmStyle.builder().value("test").build());
-        value.put("desc",ItsmStyle.builder().value("test").build());
-        value.put("organization",ItsmStyle.builder().value("test").build());
-        value.put("authSecrecy",ItsmStyle.builder().value("test").build());
-        value.put("subjectScopes",ItsmStyle.builder().value("test").build());
+        value.put("projectName", ItsmStyle.builder().value("test").build());
+        value.put("projectId", ItsmStyle.builder().value("test").build());
+        value.put("desc", ItsmStyle.builder().value("test").build());
+        value.put("organization", ItsmStyle.builder().value("test").build());
+        value.put("authSecrecy", ItsmStyle.builder().value("test").build());
+        value.put("subjectScopes", ItsmStyle.builder().value("test").build());
         ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
         GradeManagerApplicationUpdateDTO build = GradeManagerApplicationUpdateDTO.builder().name("test-134").description("123")
@@ -478,5 +487,22 @@ public class V2ManagerServiceTest {
     @Test
     public void testGetGradeManagerDetail() {
         System.out.println(v2ManagerService.getGradeManagerDetail("3156"));
+    }
+
+    @Test
+    public void testSearchGroup() throws IOException {
+        SearchGroupDTO pipeline_edit = SearchGroupDTO.builder()
+            .actionId("pipeline_edit")
+            .resourceId("abc")
+            .build();
+        String s = JsonUtil.toJson(pipeline_edit);
+        System.out.println(JsonUtil.fromJson(s, new TypeReference<HashMap<String, String>>() {
+        }));
+    }
+
+    @Test
+    public void testGetGroupPermissionDetail(){
+        List<GroupPermissionDetailResponseDTO> groupPermissionDetail = v2ManagerService.getGroupPermissionDetail(10465);
+        System.out.println(groupPermissionDetail);
     }
 }
