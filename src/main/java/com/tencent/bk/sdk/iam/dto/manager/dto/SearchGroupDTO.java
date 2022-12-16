@@ -28,4 +28,6 @@ public class SearchGroupDTO {
     private String name;
     /*用户组id筛选*/
     private Integer id;
+    /*用户组描述筛选*/
+    private String description;
 }

@@ -36,6 +36,7 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
@@ -276,6 +277,32 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw iamException;
         } catch (Exception e) {
             log.error("get V2 role group action failed|{}", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId) {
+        String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET, iamConfiguration.getSystemId(), groupId);
+        try {
+            String responseStr = apigwHttpClientService.doHttpGet(url);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("get Group Permission Detail response|{}", responseStr);
+                ResponseDTO<List<GroupPermissionDetailResponseDTO>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<List<GroupPermissionDetailResponseDTO>>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData();
+                }
+            } else {
+                log.warn("get Group Permission Detail got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("get Group Permission Detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("get Group Permission Detail failed|{}", e);
             throw new RuntimeException(e);
         }
         return null;

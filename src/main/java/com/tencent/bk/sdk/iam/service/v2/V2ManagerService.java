@@ -32,7 +32,9 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -154,6 +156,10 @@ public interface V2ManagerService {
      */
     public List<GroupAction> getRoleGroupActionV2(Integer groupId);
 
+    /**
+     * 查询用户组权限详情
+     */
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId);
 
     /**
      * 校验用户是否某个用户组的有效成员

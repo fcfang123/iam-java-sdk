@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.service.v2.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationUpdateDTO;
@@ -46,6 +47,7 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceCreatorActionsDTO;
 import com.tencent.bk.sdk.iam.dto.resource.V2ResourceNode;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
+import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.service.IamActionService;
 import com.tencent.bk.sdk.iam.service.IamResourceService;
@@ -60,6 +62,7 @@ import com.tencent.bk.sdk.iam.service.impl.ResourceServiceImpl;
 import com.tencent.bk.sdk.iam.service.impl.SystemServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
 import com.tencent.bk.sdk.iam.service.v2.V2PolicyService;
+import com.tencent.bk.sdk.iam.util.JsonUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -156,7 +159,7 @@ public class V2ManagerServiceTest {
 
     @Test
     public void testV2GetRoleGroupAction() {
-        List<GroupAction> groupActions = v2ManagerService.getRoleGroupActionV2(10125);
+        List<GroupAction> groupActions = v2ManagerService.getRoleGroupActionV2(10429);
         System.out.println(groupActions);
     }
 
@@ -484,5 +487,22 @@ public class V2ManagerServiceTest {
     @Test
     public void testGetGradeManagerDetail() {
         System.out.println(v2ManagerService.getGradeManagerDetail("3156"));
+    }
+
+    @Test
+    public void testSearchGroup() throws IOException {
+        SearchGroupDTO pipeline_edit = SearchGroupDTO.builder()
+            .actionId("pipeline_edit")
+            .resourceId("abc")
+            .build();
+        String s = JsonUtil.toJson(pipeline_edit);
+        System.out.println(JsonUtil.fromJson(s, new TypeReference<HashMap<String, String>>() {
+        }));
+    }
+
+    @Test
+    public void testGetGroupPermissionDetail(){
+        List<GroupPermissionDetailResponseDTO> groupPermissionDetail = v2ManagerService.getGroupPermissionDetail(10465);
+        System.out.println(groupPermissionDetail);
     }
 }
