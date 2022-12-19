@@ -367,11 +367,7 @@ public class V2ManagerServiceTest {
         V2PageInfoDTO v2PageInfoDTO = new V2PageInfoDTO();
         v2PageInfoDTO.setPage(1);
         v2PageInfoDTO.setPageSize(100);
-        SearchGroupDTO pipeline_edit = SearchGroupDTO.builder()
-            .resourceId("greysonfang-test-41")
-            .resourceTypeId("project")
-            .resourceTypeSystemId("bk_ci_rbac")
-            .build();
+        SearchGroupDTO pipeline_edit = SearchGroupDTO.builder().id(null).build();
         V2ManagerRoleGroupVO gradeManagerRoleGroupV2 = v2ManagerService.getGradeManagerRoleGroupV2("3238", pipeline_edit, v2PageInfoDTO);
         System.out.println(gradeManagerRoleGroupV2);
     }
@@ -486,7 +482,7 @@ public class V2ManagerServiceTest {
 
     @Test
     public void testGetGradeManagerDetail() {
-        System.out.println(v2ManagerService.getGradeManagerDetail("3156"));
+        System.out.println(v2ManagerService.getGradeManagerDetail("3268"));
     }
 
     @Test
@@ -501,7 +497,7 @@ public class V2ManagerServiceTest {
     }
 
     @Test
-    public void testGetGroupPermissionDetail(){
+    public void testGetGroupPermissionDetail() {
         List<GroupPermissionDetailResponseDTO> groupPermissionDetail = v2ManagerService.getGroupPermissionDetail(10465);
         System.out.println(groupPermissionDetail);
     }

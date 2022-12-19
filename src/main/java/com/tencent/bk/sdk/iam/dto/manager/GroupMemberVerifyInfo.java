@@ -25,4 +25,9 @@ public class GroupMemberVerifyInfo {
      * */
     @JsonProperty("expired_at")
     private Long expiredAt;
+    /*
+     * 创建时间, UTC时间
+     * */
+    @JsonProperty("created_at")
+    private String createdAt;
 }

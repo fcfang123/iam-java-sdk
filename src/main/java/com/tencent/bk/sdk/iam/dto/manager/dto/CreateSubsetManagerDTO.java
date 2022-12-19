@@ -50,4 +50,9 @@ public class CreateSubsetManagerDTO {
      * */
     @JsonProperty("inherit_subject_scope")
     private Boolean inheritSubjectScope;
+    /**
+     * 是否创建同步权限用户组, 默认false
+     */
+    @JsonProperty("sync_perm")
+    private Boolean syncPerm;
 }

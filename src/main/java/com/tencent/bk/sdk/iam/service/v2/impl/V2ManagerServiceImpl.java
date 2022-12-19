@@ -391,7 +391,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Integer batchCreateSubsetRoleGroup(Integer subsetManagerId, ManagerRoleGroupDTO managerRoleGroupDTO) {
         try {
-            String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_GROUP_CREATE, subsetManagerId);
+            String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_GROUP_CREATE, iamConfiguration.getSystemId(), subsetManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, managerRoleGroupDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("create subset manager role group response|{}", responseStr);
@@ -475,7 +475,8 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
             if (searchGroupDTO != null) {
                 String s = HttpUtils.joinParams(searchGroupDTO);
-                url = url.concat("&".concat(s));
+                if (StringUtils.isNotBlank(s))
+                    url = url.concat("&".concat(s));
             }
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
