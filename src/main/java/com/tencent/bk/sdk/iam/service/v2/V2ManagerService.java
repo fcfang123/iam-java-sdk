@@ -20,6 +20,7 @@ import com.tencent.bk.sdk.iam.dto.action.GroupAction;
 import com.tencent.bk.sdk.iam.dto.application.ApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.application.ApplicationVO;
 import com.tencent.bk.sdk.iam.dto.manager.AuthorizationScopes;
+import com.tencent.bk.sdk.iam.dto.manager.GroupMemberVerifyInfo;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
@@ -27,6 +28,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
@@ -36,7 +38,9 @@ import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // v2类接口使用于RBAC权限;对于ABAC权限，使用v1接口
 public interface V2ManagerService {
@@ -56,6 +60,14 @@ public interface V2ManagerService {
      * 查询二级管理员下用户组列表
      */
     public V2ManagerRoleGroupVO getSubsetManagerRoleGroup(Integer subsetManagerId, V2PageInfoDTO pageInfoDTO);
+
+    /**
+     * 查询二级管理员详情
+     * @param subsetManagerId 二级管理员ID
+     */
+    public ManagerDetailResponse getSubsetManagerDetail(Integer subsetManagerId);
+
+    public void updateSubsetManager(Integer subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO);
 
     //----------------分级管理员相关接口----------------
 
@@ -166,10 +178,10 @@ public interface V2ManagerService {
      *
      * @param groupIds 1,2,3,4  多个用“,”分割
      */
-    public GroupMemberVerifyResponse verifyGroupValidMember(String userId, String groupIds);
+    public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidMember(String userId, String groupIds);
 
     /**
      * 校验部门是否某个用户组的有效成员
      */
-    public GroupMemberVerifyResponse verifyGroupValidDepartment(String departmentId, String groupIds);
+    public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidDepartment(String departmentId, String groupIds);
 }

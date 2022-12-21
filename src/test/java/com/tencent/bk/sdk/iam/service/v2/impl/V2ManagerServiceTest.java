@@ -42,12 +42,14 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceCreatorActionsDTO;
 import com.tencent.bk.sdk.iam.dto.resource.V2ResourceNode;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
+import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.service.IamActionService;
 import com.tencent.bk.sdk.iam.service.IamResourceService;
@@ -500,5 +502,32 @@ public class V2ManagerServiceTest {
     public void testGetGroupPermissionDetail() {
         List<GroupPermissionDetailResponseDTO> groupPermissionDetail = v2ManagerService.getGroupPermissionDetail(10465);
         System.out.println(groupPermissionDetail);
+    }
+
+    @Test
+    public void testGetSubsetManagerDetail() {
+        ManagerDetailResponse subsetManagerDetail = v2ManagerService.getSubsetManagerDetail(3305);
+        System.out.println(subsetManagerDetail);
+    }
+
+    @Test
+    public void testupdateSubsetManager() {
+        ManagerScopes department = new ManagerScopes("user", "mingshewhe");
+        AuthorizationScopes resources = AuthorizationScopes.builder()
+                .system("bk_ci_rbac")
+                .actions(Arrays.asList(new Action("project_view")))
+                .resources(
+                        Arrays.asList(ManagerResources
+                                .builder()
+                                .system("bk_ci_rbac")
+                                .type("project")
+                                .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci_rbac", "project", "mht-rbac", "mht-rbac"))))
+                                .build()))
+                .build();
+        UpdateSubsetManagerDTO test1 = UpdateSubsetManagerDTO.builder().name("greysonfang-v2-subset1").description("test")
+                .members(Arrays.asList("mingshewhe"))
+                .authorizationScopes(Arrays.asList(resources))
+                .subjectScopes(Arrays.asList(department)).build();
+        v2ManagerService.updateSubsetManager(3305, test1);
     }
 }
