@@ -23,6 +23,7 @@ import com.tencent.bk.sdk.iam.dto.action.GroupAction;
 import com.tencent.bk.sdk.iam.dto.application.ApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.application.ApplicationVO;
 import com.tencent.bk.sdk.iam.dto.manager.AuthorizationScopes;
+import com.tencent.bk.sdk.iam.dto.manager.GroupMemberVerifyInfo;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
@@ -30,6 +31,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.CreateVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
@@ -50,6 +52,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class V2ManagerServiceImpl implements V2ManagerService {
@@ -309,15 +312,16 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public GroupMemberVerifyResponse verifyGroupValidMember(String userId, String groupIds) {
+    public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidMember(String userId, String groupIds) {
         try {
             String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_MEMBER, iamConfiguration.getSystemId(), userId, groupIds);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify group valid member response|{}", responseStr);
-                ResponseDTO<GroupMemberVerifyResponse> responseInfo =
-                    JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<GroupMemberVerifyResponse>>() {
-                    });
+                ResponseDTO<Map<Integer, GroupMemberVerifyInfo>> responseInfo =
+                        JsonUtil.fromJson(responseStr,
+                                new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
+                                });
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                     return responseInfo.getData();
@@ -336,15 +340,16 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public GroupMemberVerifyResponse verifyGroupValidDepartment(String departmentId, String groupIds) {
+    public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidDepartment(String departmentId, String groupIds) {
         try {
             String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_DEPARTMENT, departmentId, groupIds);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify group valid department response|{}", responseStr);
-                ResponseDTO<GroupMemberVerifyResponse> responseInfo =
-                    JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<GroupMemberVerifyResponse>>() {
-                    });
+                ResponseDTO<Map<Integer, GroupMemberVerifyInfo>> responseInfo =
+                        JsonUtil.fromJson(responseStr,
+                                new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
+                                });
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                     return responseInfo.getData();
@@ -680,6 +685,58 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public ManagerDetailResponse getSubsetManagerDetail(Integer subsetManagerId) {
+        try {
+            String responseStr = apigwHttpClientService.doHttpGet(
+                    String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), subsetManagerId));
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("get subeset manager detail response|{}", responseStr);
+                ResponseDTO<ManagerDetailResponse> responseInfo =
+                        JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<ManagerDetailResponse>>() {
+                        });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData();
+                }
+            } else {
+                log.warn("get subeset manager detail got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("get subeset manager detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("get subeset manager detail failed|{}", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public void updateSubsetManager(Integer subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO) {
+        try {
+            String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_UPDATE, iamConfiguration.getSystemId(), subsetManagerId);
+            String responseStr = apigwHttpClientService.doHttpPost(url, updateSubsetManagerDTO);
+            if (StringUtils.isNotBlank(responseStr)) {
+                System.out.println(responseStr);
+                log.debug("update subset manager response|{}", responseStr);
+                ResponseDTO<Object> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Object>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                }
+            } else {
+                log.warn("update subset manager got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("update subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("update subset manager failed|{}", e);
+            throw new RuntimeException(e);
+        }
     }
 
     private String buildURLPage(String iamURL, PageInfoDTO pageInfoDTO) {

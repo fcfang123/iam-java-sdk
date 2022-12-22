@@ -39,4 +39,6 @@ public class V2IamUri {
     public static final String V2_MANAGER_ROLE_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/";
     public static final String V2_MANAGER_ROLE_CREATE = "/api/v2/open/management/systems/%s/grade_managers/";
     public static final String V2_MANAGER_DETAIL_GET = "/api/v2/open/management/systems/%s/grade_managers/%s";
+    public static final String V2_SUBSET_GRADE_MANAGER_DETAIL_GET = "/api/v2/open/management/systems/%s/subset_managers/%s";
+    public static final String V2_SUBSET_GRADE_MANAGER_UPDATE = "/api/v2/open/management/systems/%s/subset_managers/%s";
 }
