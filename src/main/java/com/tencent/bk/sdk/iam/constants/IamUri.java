@@ -58,6 +58,7 @@ public class IamUri {
     public static final String BATCH_QUERY_POLICY = "/api/v1/policy/query_by_actions";
     public static final String QUERY_POLICY_WITH_RESOURCE = "/api/v1/policy/query_by_ext_resources";
     public static final String USER_GROUP = "/api/v1/open/users/%s/groups?inherit=%s";
+    public static final String AUTH_POLICY = "api/v1/policy/auth";
 
     public static final String GRANT_OR_REVOKE = "/api/v1/open/authorization/path/";
     public static final String BATCH_GRANT_OR_REVOKE = "/api/v1/open/authorization/batch_path/";

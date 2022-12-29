@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.service;
 
+import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import java.util.List;
 
 import com.tencent.bk.sdk.iam.dto.ExpressionWithResourceDTO;
@@ -52,4 +53,9 @@ public interface PolicyService {
      * 获取用户加入的用户组
      */
     List<UserGroupDTO> getUserGroup(String username, Boolean inherit);
+
+    /**
+     * 直接鉴权
+     */
+    public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO);
 }
