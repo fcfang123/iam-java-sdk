@@ -17,7 +17,6 @@ import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationUpdateDTO;
 import com.tencent.bk.sdk.iam.dto.PageInfoDTO;
 import com.tencent.bk.sdk.iam.dto.SubjectDTO;
-import com.tencent.bk.sdk.iam.dto.V2BelongDTO;
 import com.tencent.bk.sdk.iam.dto.V2PageInfoDTO;
 import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
@@ -63,7 +62,6 @@ import com.tencent.bk.sdk.iam.service.impl.PolicyServiceImpl;
 import com.tencent.bk.sdk.iam.service.impl.ResourceServiceImpl;
 import com.tencent.bk.sdk.iam.service.impl.SystemServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
-import com.tencent.bk.sdk.iam.service.v2.V2PolicyService;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -73,7 +71,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Disabled
@@ -84,7 +81,7 @@ public class V2ManagerServiceTest {
     private ApigwHttpClientServiceImpl apigwHttpClientService = new ApigwHttpClientServiceImpl(iamConfiguration);
     V2ManagerService v2ManagerService = new V2ManagerServiceImpl(apigwHttpClientService, iamConfiguration);
     ManagerService managerService = new ManagerServiceImpl(apigwHttpClientService, iamConfiguration);
-    V2PolicyService v2PolicyService = new V2PolicyServiceImpl(apigwHttpClientService, iamConfiguration);
+    PolicyService v2PolicyService = new V2PolicyServiceImpl(apigwHttpClientService, iamConfiguration);
     PolicyService policyService = new PolicyServiceImpl(iamConfiguration, apigwHttpClientService);
 
     SystemService systemService = new SystemServiceImpl(apigwHttpClientService, iamConfiguration);
@@ -231,13 +228,6 @@ public class V2ManagerServiceTest {
         System.out.println(managerService.getUserGroup(3097, "greysonfang"));
     }
 
-
-    @Test
-    public void testVerifyRoleGruopMember() {
-        V2BelongDTO v2BelongDTO = V2BelongDTO.builder().userId("greysonfang").groupIds("10019").inherit(false).build();
-        Map<Integer, Boolean> map = v2PolicyService.verifyRoleGruopMember(v2BelongDTO);
-        System.out.println(map);
-    }
 
     @Test
     public void testGetResourceCreatorAction() {

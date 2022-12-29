@@ -14,35 +14,80 @@ package com.tencent.bk.sdk.iam.service.v2.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.V2IamUri;
-import com.tencent.bk.sdk.iam.dto.V2BelongDTO;
+import com.tencent.bk.sdk.iam.dto.SubjectDTO;
 import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
+import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
+import com.tencent.bk.sdk.iam.dto.expression.ExpressionDTO;
+import com.tencent.bk.sdk.iam.dto.request.QueryPolicyRequestDTO;
+import com.tencent.bk.sdk.iam.dto.resource.ResourceDTO;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
-import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
-import com.tencent.bk.sdk.iam.service.v2.V2PolicyService;
+import com.tencent.bk.sdk.iam.service.HttpClientService;
+import com.tencent.bk.sdk.iam.service.impl.PolicyServiceImpl;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
 @Slf4j
-public class V2PolicyServiceImpl implements V2PolicyService {
+public class V2PolicyServiceImpl extends PolicyServiceImpl {
 
-    private final ApigwHttpClientServiceImpl apigwHttpClientService;
+    private final HttpClientService httpClientService;
     private final IamConfiguration iamConfiguration;
 
-    public V2PolicyServiceImpl(ApigwHttpClientServiceImpl apigwHttpClientService, IamConfiguration iamConfiguration) {
-        this.apigwHttpClientService = apigwHttpClientService;
+    public V2PolicyServiceImpl(HttpClientService httpClientService, IamConfiguration iamConfiguration) {
+        super(iamConfiguration, httpClientService);
+        this.httpClientService = httpClientService;
         this.iamConfiguration = iamConfiguration;
+    }
+
+    @Override
+    public ExpressionDTO getPolicyByAction(String username, ActionDTO action, List<ResourceDTO> resourceList) {
+        if (resourceList == null) {
+            resourceList = Collections.emptyList();
+        }
+        QueryPolicyRequestDTO queryPolicyRequest =
+                QueryPolicyRequestDTO.builder().subject(SubjectDTO.builder().id(username).type("user").build())
+                        .action(action).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
+        if (log.isDebugEnabled()) {
+            log.debug("Get policy by action request|{}|{}|{}|{}", username, action, resourceList, queryPolicyRequest);
+        }
+        String url = String.format(V2IamUri.V2_QUERY_POLICY, iamConfiguration.getSystemId());
+        String policyResponse = httpClientService.doHttpPost(url, queryPolicyRequest);
+        if (StringUtils.isNotBlank(policyResponse)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Get policy by action response|{}", policyResponse);
+            }
+            ResponseDTO<ExpressionDTO> responseInfo;
+            try {
+                responseInfo = JsonUtil.fromJson(policyResponse,
+                        new TypeReference<ResponseDTO<ExpressionDTO>>() {
+                        });
+            } catch (IOException e) {
+                log.error("Error while parse policy response!|{}|{}|{}|{}", username, action, resourceList,
+                        policyResponse, e);
+                return null;
+            }
+            if (responseInfo != null) {
+                ResponseUtil.checkResponse(responseInfo);
+                return responseInfo.getData();
+            }
+        } else {
+            log.warn("Get policy by action got empty response!");
+        }
+        return null;
     }
 
     @Override
     public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO) {
         try {
             String url = String.format(V2IamUri.V2_AUTH_POLICY, iamConfiguration.getSystemId());
-            String responseStr = apigwHttpClientService.doHttpPost(url, queryPolicyDTO);
+            String responseStr = httpClientService.doHttpPost(url, queryPolicyDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("V2 verify permissions response|{}", responseStr);
                 ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
@@ -59,38 +104,6 @@ public class V2PolicyServiceImpl implements V2PolicyService {
             throw iamException;
         } catch (Exception e) {
             log.error("V2 verify permissions response failed|{}", e);
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    @Override
-    public Map<Integer, Boolean> verifyRoleGruopMember(V2BelongDTO v2BelongDTO) {
-        try {
-            String url = String.format(
-                V2IamUri.V2_MANAGER_ROLE_GROUP_BELONG,
-                iamConfiguration.getSystemId(),
-                v2BelongDTO.getUserId(),
-                v2BelongDTO.getGroupIds(),
-                v2BelongDTO.getInherit()
-            );
-            String responseStr = apigwHttpClientService.doHttpGet(url);
-            if (StringUtils.isNotBlank(responseStr)) {
-                log.debug("V2 verify gruop member response|{}", responseStr);
-                ResponseDTO<Map<Integer, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<Integer, Boolean>>>() {
-                });
-                if (responseInfo != null) {
-                    ResponseUtil.checkResponse(responseInfo);
-                    return responseInfo.getData();
-                }
-            } else {
-                log.warn("V2 verify gruop member got empty response!");
-            }
-        } catch (IamException iamException) {
-            log.error("V2 verify Gruop Member  response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
-            throw iamException;
-        } catch (Exception e) {
-            log.error("V2 verify gruop member response failed|{}", e);
             throw new RuntimeException(e);
         }
         return null;

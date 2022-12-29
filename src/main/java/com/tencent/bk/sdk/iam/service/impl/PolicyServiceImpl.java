@@ -11,6 +11,8 @@
 
 package com.tencent.bk.sdk.iam.service.impl;
 
+import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
+import com.tencent.bk.sdk.iam.exception.IamException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -211,6 +213,31 @@ public class PolicyServiceImpl implements PolicyService {
             return null;
         }
 
+        return null;
+    }
+
+    @Override
+    public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO) {
+        try {
+            String responseStr = httpClientService.doHttpPost(IamUri.AUTH_POLICY, queryPolicyDTO);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("verify permissions response|{}", responseStr);
+                ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData().get("allowed");
+                }
+            } else {
+                log.warn("verify permissions got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("verify permissions response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("verify permissions response failed|{}", e);
+            throw new RuntimeException(e);
+        }
         return null;
     }
 }

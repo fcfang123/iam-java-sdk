@@ -11,18 +11,20 @@
 
 package com.tencent.bk.sdk.iam.helper;
 
+import com.tencent.bk.sdk.iam.dto.PathInfoDTO;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
-
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
+import com.tencent.bk.sdk.iam.constants.ExpressionOperationEnum;
 import com.tencent.bk.sdk.iam.dto.ExpressionWithResourceDTO;
 import com.tencent.bk.sdk.iam.dto.InstanceDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
@@ -73,6 +75,110 @@ public class AuthHelper {
         } else {
             return null;
         }
+    }
+
+    protected static List<String> calculateInstanceList(ExpressionDTO expression, String resourceType, PathInfoDTO pathInfoDTO) {
+        if (expression.isEmpty()) {
+            return Collections.emptyList();
+        }
+        if (resourceType == null) {
+            throw new IamException(-1, "ResourceType resource type cannot be empty!");
+        }
+        String type = null;
+        String attribute = null;
+        List<String> instanceList = new ArrayList<>();
+        if (StringUtils.isNotBlank(expression.getField())) {
+            try {
+                String[] field = expression.getField().split("\\.");
+                type = field[0];
+                attribute = field[1];
+                if (!resourceType.equals(type) && expression.getOperator() != ExpressionOperationEnum.EQUAL) {
+                    return Collections.emptyList();
+                }
+            } catch (Exception e) {
+                throw new IamException(-1, "Unsupported field " + expression.getField());
+            }
+        }
+        switch (expression.getOperator()) {
+            case OR:
+                Set<String> orInstanceList = new HashSet<>();
+                for (ExpressionDTO subExpression : expression.getContent()) {
+                    List<String> subInstanceList = calculateInstanceList(subExpression, resourceType, pathInfoDTO);
+                    orInstanceList.addAll(calculateInstanceList(subExpression, resourceType, pathInfoDTO));
+                    // 已经包含所有,就不再遍历
+                    if (subInstanceList.contains("*")) {
+                       break;
+                    }
+                }
+                instanceList.addAll(orInstanceList);
+                break;
+            case AND:
+                Set<String> andInstanceList = new HashSet<>();
+                boolean existInEqOp = false;
+                for (ExpressionDTO subExpression : expression.getContent()) {
+                    List<String> subInstanceList = calculateInstanceList(subExpression, resourceType, pathInfoDTO);
+                    // and只要出现空的,就直接返回
+                    if (subInstanceList.isEmpty()) {
+                        return Collections.emptyList();
+                    }
+                    // 记录and操作符中是否有in或equals操作符,如果有,则用in或equals的值
+                    if (subExpression.getOperator() == ExpressionOperationEnum.IN ||
+                            subExpression.getOperator() == ExpressionOperationEnum.EQUAL
+                    ) {
+                        existInEqOp = true;
+                    }
+                    andInstanceList.addAll(subInstanceList);
+                }
+                if (existInEqOp) {
+                    andInstanceList.remove("*");
+                }
+                instanceList.addAll(andInstanceList);
+                break;
+            case EQUAL:
+                checkParam(type, attribute, expression);
+                String equalsExpressionValue = expression.getValue().toString();
+                if (resourceType.equals(type)) {
+                    instanceList.add(equalsExpressionValue);
+                } else if (pathInfoDTO != null && equalsExpressionValue.equals(pathInfoDTO.getId())) {
+                    // 如何表达式包含整个项目
+                    instanceList.add("*");
+                }
+                break;
+            case IN:
+                checkParam(type, attribute, expression);
+                if (expression.getValue() instanceof List) {
+                    List<String> expressionValue = ((List<?>) expression.getValue()).parallelStream()
+                            .map(Object::toString).collect(Collectors.toList());
+                    instanceList.addAll(expressionValue);
+                }
+                break;
+            case START_WITH:
+                checkParam(type, attribute, expression);
+                String expressionValue = (String) expression.getValue();
+                if (PATH_ATTRIBUTE.equals(attribute)) {
+                    if (expressionValue.endsWith(",")) {
+                        expressionValue = expressionValue.substring(0, expressionValue.length() - 1);
+                    }
+                }
+                if (pathInfoDTO != null && pathInfoDTO.toString().startsWith(expressionValue)) {
+                    instanceList.add("*");
+                }
+                break;
+            case STRING_CONTAINS:
+                checkParam(type, attribute, expression);
+                expressionValue = (String) expression.getValue();
+                if (pathInfoDTO != null && pathInfoDTO.toString().contains(expressionValue)) {
+                    instanceList.add("*");
+                }
+                break;
+            case ANY:
+                instanceList.add("*");
+                break;
+            default:
+                log.info("Unrecognized expression operator " + expression.getOperator());
+                break;
+        }
+        return instanceList;
     }
 
     protected static boolean calculateExpression(Map<String, InstanceDTO> instanceMap, ExpressionDTO expression) {
@@ -493,4 +599,34 @@ public class AuthHelper {
         return false;
     }
 
+    /**
+     * 获取某个资源类型某个操作所有实例列表
+     *
+     * @param username     用户
+     * @param action       操作
+     * @param resourceType 资源类型
+     * @return 资源实例列表，如果列表中包含*表示所有的实例列表
+     */
+    public List<String> getInstanceList(String username, String action, String resourceType) {
+        ActionDTO actionDTO = new ActionDTO();
+        actionDTO.setId(action);
+        ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
+        return calculateInstanceList(expression, resourceType, null);
+    }
+
+    /**
+     * 获取某个资源类型某个操作所有实例列表
+     *
+     * @param username     用户
+     * @param action       操作
+     * @param resourceType 资源类型
+     * @param pathInfoDTO 资源类型父类型，如某个项目下所有流水线列表
+     * @return 资源实例列表，如果列表中包含*表示所有的实例列表
+     */
+    public List<String> getInstanceList(String username, String action, String resourceType, PathInfoDTO pathInfoDTO) {
+        ActionDTO actionDTO = new ActionDTO();
+        actionDTO.setId(action);
+        ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
+        return calculateInstanceList(expression, resourceType, pathInfoDTO);
+    }
 }
