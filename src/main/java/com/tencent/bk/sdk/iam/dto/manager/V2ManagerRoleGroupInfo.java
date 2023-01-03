@@ -44,5 +44,5 @@ public class V2ManagerRoleGroupInfo {
     /**
      * 是否已经加入用户组
      */
-    private Boolean Joined;
+    private Boolean joined;
 }
