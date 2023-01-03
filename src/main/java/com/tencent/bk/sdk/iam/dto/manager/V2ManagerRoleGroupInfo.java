@@ -41,4 +41,8 @@ public class V2ManagerRoleGroupInfo {
      */
     @JsonProperty("department_count")
     private Integer departmentCount;
+    /**
+     * 是否已经加入用户组
+     */
+    private Boolean Joined;
 }
