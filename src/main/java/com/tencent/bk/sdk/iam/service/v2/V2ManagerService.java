@@ -33,12 +33,10 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
-import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,9 +63,21 @@ public interface V2ManagerService {
      * 查询二级管理员详情
      * @param subsetManagerId 二级管理员ID
      */
-    public ManagerDetailResponse getSubsetManagerDetail(Integer subsetManagerId);
+    public ManagerDetailResponse getSubsetManagerDetail(String subsetManagerId);
 
-    public void updateSubsetManager(Integer subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO);
+    /**
+     * 更新二级管理员
+     * @param subsetManagerId 二级管理员ID
+     * @param updateSubsetManagerDTO
+     */
+    public void updateSubsetManager(String subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO);
+
+    /**
+     * 删除二级管理员
+     *
+     * @param subsetManagerId 二级管理员ID
+     */
+    void deleteSubsetManager(String subsetManagerId);
 
     //----------------分级管理员相关接口----------------
 
@@ -103,6 +113,13 @@ public interface V2ManagerService {
      * @return
      */
     public void updateManagerV2(String gradeManagerId, UpdateManagerDTO updateManagerDTO);
+
+    /**
+     * 删除分级管理员
+     *
+     * @param gradeManagerId 分级管理员ID
+     */
+    void deleteManagerV2(String gradeManagerId);
 
     //----------------审批单相关接口----------------
 

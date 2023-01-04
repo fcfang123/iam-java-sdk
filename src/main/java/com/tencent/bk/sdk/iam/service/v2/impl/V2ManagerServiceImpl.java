@@ -37,7 +37,6 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
-import com.tencent.bk.sdk.iam.dto.response.GroupMemberVerifyResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ManagerDetailResponse;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
@@ -451,7 +450,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     public ManagerDetailResponse getGradeManagerDetail(String gradeManagerId) {
         try {
             String responseStr = apigwHttpClientService.doHttpGet(
-                String.format(V2IamUri.V2_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), gradeManagerId));
+                String.format(V2IamUri.V2_MANAGER_ROLE_DETAIL_GET, iamConfiguration.getSystemId(), gradeManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("get subeset manager role group response|{}", responseStr);
                 ResponseDTO<ManagerDetailResponse> responseInfo =
@@ -609,6 +608,30 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
+    public void deleteManagerV2(String gradeManagerId) {
+        try {
+            String responseStr = apigwHttpClientService.doHttpDelete(String.format(V2IamUri.V2_MANAGER_ROLE_DELETE, iamConfiguration.getSystemId(), gradeManagerId));
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("delete V2 grade manager response|{}", responseStr);
+                ResponseDTO<Object> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Object>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                }
+            } else {
+                log.warn("delete V2 grade manager got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("delete V2 grade manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("delete V2 grade manager failed|{}", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
     public CallbackApplicationResponese handleCallbackApplication(String callbackId, CallbackApplicationDTO callbackApplicationDTO) {
         try {
             String url = String.format(V2IamUri.V2_CALLBACK_APPLICATION_HANDLE, iamConfiguration.getSystemId(), callbackId);
@@ -688,7 +711,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public ManagerDetailResponse getSubsetManagerDetail(Integer subsetManagerId) {
+    public ManagerDetailResponse getSubsetManagerDetail(String subsetManagerId) {
         try {
             String responseStr = apigwHttpClientService.doHttpGet(
                     String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), subsetManagerId));
@@ -715,7 +738,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public void updateSubsetManager(Integer subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO) {
+    public void updateSubsetManager(String subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO) {
         try {
             String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_UPDATE, iamConfiguration.getSystemId(), subsetManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, updateSubsetManagerDTO);
@@ -735,6 +758,30 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw iamException;
         } catch (Exception e) {
             log.error("update subset manager failed|{}", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteSubsetManager(String subsetManagerId) {
+        try {
+            String responseStr = apigwHttpClientService.doHttpDelete(String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DELETE, iamConfiguration.getSystemId(), subsetManagerId));
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("delete V2 subset manager response|{}", responseStr);
+                System.out.println("delete V2 subset manager response|" + responseStr);
+                ResponseDTO<Object> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Object>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                }
+            } else {
+                log.warn("delete V2 subset manager got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("delete V2 subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("delete V2 subset manager failed|{}", e);
             throw new RuntimeException(e);
         }
     }

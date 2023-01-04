@@ -611,7 +611,9 @@ public class AuthHelper {
         ActionDTO actionDTO = new ActionDTO();
         actionDTO.setId(action);
         ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
-        return calculateInstanceList(expression, resourceType, null);
+        List<String> instanceList = calculateInstanceList(expression, resourceType, null);
+        log.debug("get instance list|{}|{}|{}", username, action, instanceList);
+        return instanceList;
     }
 
     /**
@@ -627,6 +629,8 @@ public class AuthHelper {
         ActionDTO actionDTO = new ActionDTO();
         actionDTO.setId(action);
         ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
-        return calculateInstanceList(expression, resourceType, pathInfoDTO);
+        List<String> instanceList = calculateInstanceList(expression, resourceType, pathInfoDTO);
+        log.debug("get instance list|{}|{}|{}|{}", username, action, pathInfoDTO, instanceList);
+        return instanceList;
     }
 }
