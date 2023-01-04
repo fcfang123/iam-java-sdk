@@ -496,7 +496,7 @@ public class V2ManagerServiceTest {
 
     @Test
     public void testGetSubsetManagerDetail() {
-        ManagerDetailResponse subsetManagerDetail = v2ManagerService.getSubsetManagerDetail(3305);
+        ManagerDetailResponse subsetManagerDetail = v2ManagerService.getSubsetManagerDetail("3305");
         System.out.println(subsetManagerDetail);
     }
 
@@ -518,6 +518,11 @@ public class V2ManagerServiceTest {
                 .members(Arrays.asList("mingshewhe"))
                 .authorizationScopes(Arrays.asList(resources))
                 .subjectScopes(Arrays.asList(department)).build();
-        v2ManagerService.updateSubsetManager(3305, test1);
+        v2ManagerService.updateSubsetManager("3305", test1);
+    }
+
+    @Test
+    public void testDeleteManagerV2() {
+        v2ManagerService.deleteSubsetManager("3307");
     }
 }

@@ -16,6 +16,7 @@ public class V2IamUri {
     public static final String V2_MANAGER_ROLE_GROUP_UPDATE = "/api/v2/open/management/systems/%s/groups/%s/";
     public static final String V2_MANAGER_ROLE_GROUP_DELETE = "/api/v2/open/management/systems/%s/groups/%s/";
     public static final String V2_MANAGER_ROLE_GROUP_GRANT = "/api/v2/open/management/systems/%s/groups/%s/policies/";
+
     public static final String V2_MANAGER_ROLE_GROUP_ACTION_DEL = "/api/v2/open/management/systems/%s/groups/%s/actions/-/policies/";
     public static final String V2_MANAGER_ROLE_GROUP_ACTION_GET = "/api/v2/open/management/systems/%s/groups/%s/policies/-/actions/";
     public static final String V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET = "/api/v2/open/management/systems/%s/groups/%s/policies/";
@@ -31,15 +32,28 @@ public class V2IamUri {
     public static final String V2_GRADE_MANAGER_APPLICATION_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/applications/";
     public static final String V2_CALLBACK_APPLICATION_HANDLE = "/api/v2/open/management/systems/%s/applications/%s/approve/";
     public static final String V2_CALLBACK_APPLICATION_CANCEL = "/api/v2/open/management/systems/%s/applications/%s/cancel/";
-    public static final String V2_SUBSET_GRADE_MANAGER_CREATE = "/api/v2/open/management/systems/%s/grade_managers/%s/subset_managers/";
+
     public static final String V2_SUBSET_GRADE_MANAGER_GROUP_CREATE = "/api/v2/open/management/systems/%s/subset_managers/%s/groups/";
     public static final String V2_VERIFY_GROUP_VALID_MEMBER = "/api/v2/open/management/systems/%s/users/%s/groups/belong/?group_ids=%s";
     public static final String V2_VERIFY_GROUP_VALID_DEPARTMENT = "/api/v2/open/management/systems/%s/departments/%s/groups/belong/?group_ids=%s";
     public static final String V2_SUBSET_GRADE_MANAGER_GROUP_GET = "/api/v2/open/management/systems/%s/subset_managers/%s/groups/";
     public static final String V2_MANAGER_GRADE_GROUP_GET = "/api/v2/open/management/systems/%s/grade_managers/%s/groups/";
-    public static final String V2_MANAGER_ROLE_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/";
+
+    // 创建分级管理员
     public static final String V2_MANAGER_ROLE_CREATE = "/api/v2/open/management/systems/%s/grade_managers/";
-    public static final String V2_MANAGER_DETAIL_GET = "/api/v2/open/management/systems/%s/grade_managers/%s";
+    // 更新分级管理员
+    public static final String V2_MANAGER_ROLE_UPDATE = "/api/v2/open/management/systems/%s/grade_managers/%s/";
+    // 获取分级管理员详情
+    public static final String V2_MANAGER_ROLE_DETAIL_GET = "/api/v2/open/management/systems/%s/grade_managers/%s";
+    // 删除分级管理员
+    public static final String V2_MANAGER_ROLE_DELETE = "/api/v2/open/management/systems/%s/grade_managers/%s";
+
+    // 创建二级管理员
+    public static final String V2_SUBSET_GRADE_MANAGER_CREATE = "/api/v2/open/management/systems/%s/grade_managers/%s/subset_managers/";
+    // 获取二级管理员详情
     public static final String V2_SUBSET_GRADE_MANAGER_DETAIL_GET = "/api/v2/open/management/systems/%s/subset_managers/%s";
+    // 更新二级管理员
     public static final String V2_SUBSET_GRADE_MANAGER_UPDATE = "/api/v2/open/management/systems/%s/subset_managers/%s";
+    // 删除二级管理员
+    public static final String V2_SUBSET_GRADE_MANAGER_DELETE = "/api/v2/open/management/systems/%s/subset_managers/%s/";
 }
