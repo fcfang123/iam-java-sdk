@@ -55,4 +55,10 @@ public class UpdateSubsetManagerDTO {
      */
     @JsonProperty("sync_perm")
     private Boolean syncPerm;
+
+    /**
+     * 	如果sync_perm为true, 可以自定义用户组名称, 默认为空
+     */
+    @JsonProperty("group_name")
+    private String groupName;
 }

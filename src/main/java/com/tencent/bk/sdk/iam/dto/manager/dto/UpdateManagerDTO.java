@@ -40,7 +40,15 @@ public class UpdateManagerDTO {
 
     @JsonProperty("subject_scopes")
     List<ManagerScopes> subjectScopes;
-
+    /**
+     * 是否创建同步权限用户组, 默认false
+     */
     @JsonProperty("sync_perm")
     Boolean syncPerm;
+
+    /**
+     * 	如果sync_perm为true, 可以自定义用户组名称, 默认为空
+     */
+    @JsonProperty("group_name")
+    private String groupName;
 }
