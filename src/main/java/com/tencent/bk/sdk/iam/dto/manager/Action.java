@@ -12,8 +12,10 @@
 package com.tencent.bk.sdk.iam.dto.manager;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Action {
     String id;
 
