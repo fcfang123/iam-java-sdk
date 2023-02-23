@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.dto.manager.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencent.bk.sdk.iam.dto.manager.AuthorizationScopes;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerScopes;
 import lombok.Builder;
@@ -41,6 +42,14 @@ public class CreateManagerDTO {
     List<AuthorizationScopes> authorization_scopes;
 
     List<ManagerScopes> subject_scopes;
-
+    /**
+     * 是否创建同步权限用户组, 默认false
+     */
     Boolean sync_perm;
+
+    /**
+     * 	如果sync_perm为true, 可以自定义用户组名称, 默认为空
+     */
+    @JsonProperty("group_name")
+    private String groupName;
 }

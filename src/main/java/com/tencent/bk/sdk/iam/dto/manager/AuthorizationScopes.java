@@ -11,13 +11,17 @@
 
 package com.tencent.bk.sdk.iam.dto.manager;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorizationScopes {
     /**
      * 系统ID
