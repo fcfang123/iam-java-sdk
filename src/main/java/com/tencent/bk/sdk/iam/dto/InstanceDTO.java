@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.dto;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.Data;
@@ -42,6 +43,14 @@ public class InstanceDTO {
      * 资源路径，不包含本身，选填
      */
     private PathInfoDTO path;
+
+    /**
+     * 资源路径，不包含本身，选填
+     *
+     * path 用于资源只有一个父类,
+     * paths 用于资源有多个父类
+     */
+    private List<PathInfoDTO> paths;
 
     /**
      * 资源属性，选填

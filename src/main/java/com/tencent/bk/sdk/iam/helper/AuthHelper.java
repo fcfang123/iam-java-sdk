@@ -379,6 +379,10 @@ public class AuthHelper {
                         StringBuilder sb = new StringBuilder(instance.getPath().toString());
                         return Collections.singletonList(sb.append(instance.getType()).append(",").append(instance.getId()).append(
                                 "/").toString());
+                    } else if (instance.getPaths() != null && !instance.getPaths().isEmpty()) {
+                        return instance.getPaths().stream().map(
+                                path -> path.toString() + instance.getType() + "," + instance.getId() + "/"
+                        ).collect(Collectors.toList());
                     } else {
                         if (instance.getAttribute() != null && instance.getAttribute().get(PATH_ATTRIBUTE) != null) {
                             if (instance.getAttribute().get(PATH_ATTRIBUTE) instanceof List) {

@@ -44,6 +44,20 @@ public class AuthHelperTest {
 		System.out.println(instanceDTO1);
 		instanceMap.put(instanceDTO1.getType(), instanceDTO1);
 
+		InstanceDTO instanceDTO2 = new InstanceDTO();
+		PathInfoDTO pipelineGroupPath = new PathInfoDTO();
+		pipelineGroupPath.setType("pipeline_group");
+		pipelineGroupPath.setId("mjrjvoem");
+		PathInfoDTO pathInfoDTO2 = new PathInfoDTO();
+		pathInfoDTO2.setType("project");
+		pathInfoDTO2.setId("rbactest");
+		pathInfoDTO2.setChild(pipelineGroupPath);
+		instanceDTO2.setType("pipeline");
+		instanceDTO2.setId("p-dfdfdff4dabca4fc282e5ff63644bd339");
+		instanceDTO2.setPaths(Arrays.asList(pathInfoDTO, pathInfoDTO2));
+		System.out.println(instanceDTO2);
+
+
 		List<ExpressionDTO> content = new ArrayList<>();
 		ExpressionDTO content1 = new ExpressionDTO();
 		content1.setOperator(ExpressionOperationEnum.START_WITH);
@@ -65,16 +79,26 @@ public class AuthHelperTest {
 		content4.setField("pipeline._bk_iam_path_");
 		content4.setValue("/project,v3test/pipeline,p-54fb8b6562584df4b3693f7c787c105a/");
 
+		ExpressionDTO content5 = new ExpressionDTO();
+		content5.setOperator(ExpressionOperationEnum.STRING_CONTAINS);
+		content5.setField("pipeline._bk_iam_path_");
+		content5.setValue("/pipeline_group,mjrjvoem/");
+
 		content.add(content1);
 		content.add(content2);
 		content.add(content3);
 		content.add(content4);
+		content.add(content5);
 
 		ExpressionDTO.setField(null);
 		ExpressionDTO.setOperator(ExpressionOperationEnum.OR);
 		ExpressionDTO.setContent(content);
 
 		Boolean isallow = AuthHelper.calculateExpression(instanceMap, ExpressionDTO);
+		System.out.println(isallow);
+
+		instanceMap.put(instanceDTO2.getType(), instanceDTO2);
+		isallow = AuthHelper.calculateExpression(instanceMap, ExpressionDTO);
 		System.out.println(isallow);
 	}
 
