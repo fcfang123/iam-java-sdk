@@ -56,4 +56,6 @@ public class V2IamUri {
     public static final String V2_SUBSET_GRADE_MANAGER_UPDATE = "/api/v2/open/management/systems/%s/subset_managers/%s";
     // 删除二级管理员
     public static final String V2_SUBSET_GRADE_MANAGER_DELETE = "/api/v2/open/management/systems/%s/subset_managers/%s/";
+    // 用户组续期（需要审批版）
+    public static final String V2_GROUPS_RENEW_APPLICATIONS = "/api/v2/open/management/systems/%s/groups/-/renew/applications/";
 }

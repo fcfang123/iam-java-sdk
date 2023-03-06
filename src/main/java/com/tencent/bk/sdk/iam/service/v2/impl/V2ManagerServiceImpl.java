@@ -27,6 +27,7 @@ import com.tencent.bk.sdk.iam.dto.manager.GroupMemberVerifyInfo;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.GroupMemberRenewApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
@@ -254,6 +255,30 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw iamException;
         } catch (Exception e) {
             log.error("renewal v2 manager role group failed|{}", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void renewalRoleGroupMemberApplication(GroupMemberRenewApplicationDTO groupMemberRenewApplicationDTO) {
+        try {
+            String url = String.format(V2IamUri.V2_GROUPS_RENEW_APPLICATIONS, iamConfiguration.getSystemId());
+            String responseStr = apigwHttpClientService.doHttpPost(url, groupMemberRenewApplicationDTO);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("renewal role group member application response|{}", responseStr);
+                ResponseDTO<Object> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Object>>() {
+                });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                }
+            } else {
+                log.warn("renewal role group member application got empty response!");
+            }
+        } catch (IamException iamException) {
+            log.error("renewal role group member application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("renewal role group member application failed|{}", e);
             throw new RuntimeException(e);
         }
     }

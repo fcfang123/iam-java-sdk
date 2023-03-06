@@ -37,6 +37,7 @@ import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerScopes;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.GroupMemberRenewApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
@@ -504,25 +505,33 @@ public class V2ManagerServiceTest {
     public void testupdateSubsetManager() {
         ManagerScopes department = new ManagerScopes("user", "mingshewhe");
         AuthorizationScopes resources = AuthorizationScopes.builder()
-                .system("bk_ci_rbac")
-                .actions(Arrays.asList(new Action("project_view")))
-                .resources(
-                        Arrays.asList(ManagerResources
-                                .builder()
-                                .system("bk_ci_rbac")
-                                .type("project")
-                                .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci_rbac", "project", "mht-rbac", "mht-rbac"))))
-                                .build()))
-                .build();
+            .system("bk_ci_rbac")
+            .actions(Arrays.asList(new Action("project_view")))
+            .resources(
+                Arrays.asList(ManagerResources
+                    .builder()
+                    .system("bk_ci_rbac")
+                    .type("project")
+                    .paths(Arrays.asList(Arrays.asList(new ManagerPath("bk_ci_rbac", "project", "mht-rbac", "mht-rbac"))))
+                    .build()))
+            .build();
         UpdateSubsetManagerDTO test1 = UpdateSubsetManagerDTO.builder().name("greysonfang-v2-subset1").description("test")
-                .members(Arrays.asList("mingshewhe"))
-                .authorizationScopes(Arrays.asList(resources))
-                .subjectScopes(Arrays.asList(department)).build();
+            .members(Arrays.asList("mingshewhe"))
+            .authorizationScopes(Arrays.asList(resources))
+            .subjectScopes(Arrays.asList(department)).build();
         v2ManagerService.updateSubsetManager("3305", test1);
     }
 
     @Test
     public void testDeleteManagerV2() {
         v2ManagerService.deleteSubsetManager("3307");
+    }
+
+    @Test
+    public void testRenewalRoleGroupMemberApplication() {
+        Long expiredTime = System.currentTimeMillis() / 1000 + TimeUnit.DAYS.toSeconds(370);
+        GroupMemberRenewApplicationDTO greysonfang = GroupMemberRenewApplicationDTO.builder().applicant("greysonfang").reason("1").expiredAt(expiredTime)
+            .groupIds(Arrays.asList(11723)).build();
+        v2ManagerService.renewalRoleGroupMemberApplication(greysonfang);
     }
 }

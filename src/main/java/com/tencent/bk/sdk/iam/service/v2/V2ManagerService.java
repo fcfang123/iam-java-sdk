@@ -24,6 +24,7 @@ import com.tencent.bk.sdk.iam.dto.manager.GroupMemberVerifyInfo;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.CreateSubsetManagerDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.GroupMemberRenewApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
@@ -102,6 +103,7 @@ public interface V2ManagerService {
      */
     public GradeManagerApplicationResponse updateGradeManagerApplication(String gradeManagerId,
                                                                          GradeManagerApplicationUpdateDTO gradeManagerApplicationUpdateDTO);
+
     /**
      * 直接创建分级管理员
      **/
@@ -176,9 +178,15 @@ public interface V2ManagerService {
     public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, PageInfoDTO pageInfoDTO);
 
     /**
-     * 用户组成员续期
+     * 用户组成员续期(不需要审批版本)
      */
     public void renewalRoleGroupMemberV2(Integer groupId, ManagerMemberGroupDTO managerMemberGroupDTO);
+
+    /**
+     * 用户组成员续期(需要审批版本)
+     */
+    public void renewalRoleGroupMemberApplication(GroupMemberRenewApplicationDTO groupMemberRenewApplicationDTO);
+
 
     /**
      * 查询用户组有权限的Action列表
