@@ -34,11 +34,11 @@ class PathInfoDTOTest {
 
     @Test
     void testSystemPathInfoToString() {
-        SystemPathInfoDTO pathInfo = new SystemPathInfoDTO();
+        PathInfoDTO pathInfo = new PathInfoDTO();
         pathInfo.setSystem("bk_ci_rbac");
         pathInfo.setType("a");
         pathInfo.setId("1");
-        pathInfo.setChild(new SystemPathInfoDTO());
+        pathInfo.setChild(new PathInfoDTO());
         pathInfo.getChild().setSystem("bk_ci_rbac");
         pathInfo.getChild().setType("b");
         pathInfo.getChild().setId("2");
