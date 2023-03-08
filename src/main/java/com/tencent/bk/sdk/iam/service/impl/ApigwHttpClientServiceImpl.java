@@ -26,6 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -114,9 +115,10 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
     }
 
     private String doExecuteRequest(HttpRequestBase request) {
+        CloseableHttpResponse response = null;
         try {
             log.info("doExecuteRequest {}", request);
-            CloseableHttpResponse response = httpClient.execute(request);
+            response = httpClient.execute(request);
             log.info("doExecuteResponse|{}", response);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
@@ -130,6 +132,8 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
         } catch (IOException e) {
             log.warn("http exception uri:{}, {}", request.getURI(), e);
             e.printStackTrace();
+        } finally {
+            HttpClientUtils.closeQuietly(response);
         }
         return null;
     }
