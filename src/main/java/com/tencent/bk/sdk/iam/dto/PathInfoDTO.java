@@ -19,6 +19,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PathInfoDTO extends BaseInfoDTO {
+    // 只有在直接鉴权的时候才需要传，其他场景都不需要传递
+    private String system;
+
     private String type;
 
     private PathInfoDTO child;
@@ -26,6 +29,9 @@ public class PathInfoDTO extends BaseInfoDTO {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("/");
+        if (system != null) {
+            sb.append(system).append(',');
+        }
         sb.append(type).append(',').append(getId());
         if (child == null) {
             return sb.append("/").toString();
