@@ -31,4 +31,17 @@ class PathInfoDTOTest {
         pathInfo.getChild().setId("2");
         assertEquals(pathInfo.toString(), "/a,1/b,2/");
     }
+
+    @Test
+    void testSystemPathInfoToString() {
+        SystemPathInfoDTO pathInfo = new SystemPathInfoDTO();
+        pathInfo.setSystem("bk_ci_rbac");
+        pathInfo.setType("a");
+        pathInfo.setId("1");
+        pathInfo.setChild(new SystemPathInfoDTO());
+        pathInfo.getChild().setSystem("bk_ci_rbac");
+        pathInfo.getChild().setType("b");
+        pathInfo.getChild().setId("2");
+        assertEquals(pathInfo.toString(), "/bk_ci_rbac,a,1/bk_ci_rbac,b,2/");
+    }
 }
