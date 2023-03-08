@@ -11,11 +11,9 @@
 
 package com.tencent.bk.sdk.iam.dto.resource;
 
-import com.tencent.bk.sdk.iam.dto.AttributesValue;
+import java.util.Map;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -26,5 +24,5 @@ public class V2ResourceNode {
 
     private String id;
 
-    private List<AttributesValue> attribute;
+    private Map<String, Object> attribute;
 }
