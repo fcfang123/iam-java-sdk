@@ -18,15 +18,14 @@ import com.tencent.bk.sdk.iam.dto.PathInfoDTO;
 import com.tencent.bk.sdk.iam.dto.expression.ExpressionDTO;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AuthHelperTest {
 
@@ -665,5 +664,18 @@ public class AuthHelperTest {
 			e.printStackTrace();
 		}
 		return expressionList;
+	}
+
+
+	@Test
+	public void testGroupRbacInstanceByAttribute() throws IOException {
+		String expressionStr = "{\"content\":[{\"content\":[{\"content\":[{\"field\":\"pipeline._bk_iam_path_\",\"op\":\"string_contains\",\"value\":\"/project,greysonfang-rbac-test-113/\"},{\"field\":\"pipeline._bk_iam_path_\",\"op\":\"string_contains\",\"value\":\"/project,asdasdasd/\"}],\"op\":\"OR\"},{\"content\":[{\"field\":\"pipeline._bk_iam_path_\",\"op\":\"string_contains\",\"value\":\"/pipeline_group,proxgyem/\"},{\"field\":\"pipeline._bk_iam_path_\",\"op\":\"string_contains\",\"value\":\"/pipeline_group,mjrjvoem/\"}],\"op\":\"OR\"},{\"field\":\"pipeline.id\",\"op\":\"in\",\"value\":[\"p-cb56802bf8eb4b6ebc2b44c77ed545bf\",\"p-a7677e1e77a5414199ff294f5a35162a\",\"p-fee8bc4ad534421e80fefb48d1310bb8\",\"p-4acf760c304d4b99851b188260ff5e45\"]}],\"op\":\"OR\"},{\"field\":\"pipeline.id\",\"op\":\"eq\",\"value\":\"p-42f8638d709a4fc9b6e9292f1c232456\"}],\"op\":\"OR\"}";
+		ExpressionDTO expression = JsonUtil.fromJson(expressionStr, ExpressionDTO.class);
+
+		PathInfoDTO projectPath = new PathInfoDTO();
+		projectPath.setType("project");
+		projectPath.setId("greysonfang-rbac-test-113");
+		Map<String, List<String>> instanceMap = AuthHelper.groupRbacInstanceByType(expression);
+		System.out.println(instanceMap);
 	}
 }

@@ -80,4 +80,8 @@ public class IamUri {
     public static final String USER_MANAGER_LIST_GET = "/api/v1/open/management/users/grade_managers/%s/groups/?user_id=%s";
     public static final String RESOURCE_CREATOR_ACTION = "/api/v1/open/authorization/resource_creator_action/";
     public static final String PERMISSION_URL = "/api/v1/open/application/";
+
+    // v1批量action直接鉴权
+    public static final String POLICY_AUTH_BY_ACTIONS = "/api/v1/policy/auth_by_actions";
+
 }

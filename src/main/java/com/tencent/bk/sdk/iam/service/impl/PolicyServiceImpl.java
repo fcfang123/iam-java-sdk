@@ -67,7 +67,7 @@ public class PolicyServiceImpl implements PolicyService {
         if (log.isDebugEnabled()) {
             log.debug("Get policy by action request|{}|{}|{}|{}", username, action, resourceList, queryPolicyRequest);
         }
-        String policyResponse = httpClientService.doHttpPost(IamUri.QUERY_POLICY, queryPolicyRequest);
+        String policyResponse = httpClientService.doHttpPost(getPolicyByActionUrl(), queryPolicyRequest);
         if (StringUtils.isNotBlank(policyResponse)) {
             if (log.isDebugEnabled()) {
                 log.debug("Get policy by action response|{}", policyResponse);
@@ -100,7 +100,7 @@ public class PolicyServiceImpl implements PolicyService {
         if (log.isDebugEnabled()) {
             log.debug("Batch get policy by action list request|{}|{}|{}|{}", username, actionList, resourceList, batchQueryPolicyRequest);
         }
-        String actionPolicyResponse = httpClientService.doHttpPost(IamUri.BATCH_QUERY_POLICY, batchQueryPolicyRequest);
+        String actionPolicyResponse = httpClientService.doHttpPost(getBatchGetPolicyByActionListUrl(), batchQueryPolicyRequest);
         if (StringUtils.isNotBlank(actionPolicyResponse)) {
             if (log.isDebugEnabled()) {
                 log.debug("Batch get policy by action list response|{}", actionPolicyResponse);
@@ -219,7 +219,7 @@ public class PolicyServiceImpl implements PolicyService {
     @Override
     public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO) {
         try {
-            String responseStr = httpClientService.doHttpPost(IamUri.AUTH_POLICY, queryPolicyDTO);
+            String responseStr = httpClientService.doHttpPost(getVerifyPermissionsUrl(), queryPolicyDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify permissions response|{}", responseStr);
                 ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
@@ -239,5 +239,53 @@ public class PolicyServiceImpl implements PolicyService {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Boolean> batchVerifyPermissions(String username, List<ActionDTO> actionList, List<ResourceDTO> resourceList) {
+        BatchQueryPolicyRequestDTO batchQueryPolicyRequest = BatchQueryPolicyRequestDTO.builder().subject(SubjectDTO.builder().id(username).type("user").build())
+                .actionList(actionList).resourceList(resourceList).system(iamConfiguration.getSystemId()).build();
+        if (log.isDebugEnabled()) {
+            log.debug("Batch verify policy by action list request|{}|{}|{}|{}", username, actionList, resourceList, batchQueryPolicyRequest);
+        }
+        String actionPolicyResponse = httpClientService.doHttpPost(getBatchVerifyPermissionsUrl(), batchQueryPolicyRequest);
+        if (StringUtils.isNotBlank(actionPolicyResponse)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Batch verify policy by action list response|{}", actionPolicyResponse);
+            }
+            ResponseDTO<Map<String, Boolean>> responseInfo;
+            try {
+                responseInfo = JsonUtil.fromJson(actionPolicyResponse,
+                        new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
+                        });
+            } catch (IOException e) {
+                log.error("Error while parse action policy response!|{}|{}|{}|{}", username, actionList, resourceList,
+                        actionPolicyResponse, e);
+                return null;
+            }
+            if (responseInfo != null) {
+                ResponseUtil.checkResponse(responseInfo);
+                return responseInfo.getData();
+            }
+        } else {
+            log.warn("Batch verify policy by action list got empty response!");
+        }
+        return null;
+    }
+
+    public String getPolicyByActionUrl() {
+        return IamUri.QUERY_POLICY;
+    }
+
+    public String getBatchGetPolicyByActionListUrl() {
+        return IamUri.BATCH_QUERY_POLICY;
+    }
+
+    public String getVerifyPermissionsUrl() {
+        return IamUri.AUTH_POLICY;
+    }
+
+    public String getBatchVerifyPermissionsUrl() {
+        return IamUri.POLICY_AUTH_BY_ACTIONS;
     }
 }

@@ -21,6 +21,7 @@ import com.tencent.bk.sdk.iam.dto.V2PageInfoDTO;
 import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionGroupDTO;
+import com.tencent.bk.sdk.iam.dto.action.ActionPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.action.GroupAction;
 import com.tencent.bk.sdk.iam.dto.itsm.ItsmAttrs;
 import com.tencent.bk.sdk.iam.dto.itsm.ItsmColumn;
@@ -46,6 +47,7 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceCreatorActionsDTO;
+import com.tencent.bk.sdk.iam.dto.resource.ResourceDTO;
 import com.tencent.bk.sdk.iam.dto.resource.V2ResourceNode;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
 import com.tencent.bk.sdk.iam.dto.response.GroupPermissionDetailResponseDTO;
@@ -64,6 +66,8 @@ import com.tencent.bk.sdk.iam.service.impl.ResourceServiceImpl;
 import com.tencent.bk.sdk.iam.service.impl.SystemServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
+import java.util.Collections;
+import java.util.Map;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -169,10 +173,10 @@ public class V2ManagerServiceTest {
         actionDTO.setId("project_view");
         V2QueryPolicyDTO v2QueryPolicyDTO = V2QueryPolicyDTO
             .builder()
-            .system("bk_ci")
+            .system("bk_ci_rbac")
             .subject(SubjectDTO.builder().type("user").id("greysonfang").build())
             .action(actionDTO)
-            .resources(Arrays.asList(V2ResourceNode.builder().system("bk_ci").type("project").id("fc-test").build())).build();
+            .resources(Arrays.asList(V2ResourceNode.builder().system("bk_ci_rbac").type("project").id("fc-test").build())).build();
         Boolean aBoolean = v2PolicyService.verifyPermissions(v2QueryPolicyDTO);
         System.out.println(aBoolean);
     }
@@ -533,5 +537,53 @@ public class V2ManagerServiceTest {
         GroupMemberRenewApplicationDTO greysonfang = GroupMemberRenewApplicationDTO.builder().applicant("greysonfang").reason("1").expiredAt(expiredTime)
             .groupIds(Arrays.asList(11723)).build();
         v2ManagerService.renewalRoleGroupMemberApplication(greysonfang);
+    }
+
+    @Test
+    public void testBatchVerifyPermissions() {
+        ActionDTO action = new ActionDTO();
+        action.setId("pipeline_list");
+
+        ResourceDTO resource = ResourceDTO.builder()
+                .type("pipeline")
+                .id("p-42f8638d709a4fc9b6e9292f1c232456")
+                .system(iamConfiguration.getSystemId())
+                .build();
+        Map<String, Boolean> result = policyService.batchVerifyPermissions(
+                "mingshewhe", Collections.singletonList(action), Collections.singletonList(resource)
+        );
+        System.out.println(result);
+    }
+
+    @Test
+    public void testV2BatchVerifyPermissions() {
+        ActionDTO action = new ActionDTO();
+        action.setId("pipeline_list");
+
+        ResourceDTO resource = ResourceDTO.builder()
+                .type("pipeline")
+                .id("p-42f8638d709a4fc9b6e9292f1c232456")
+                .system(iamConfiguration.getSystemId())
+                .build();
+        Map<String, Boolean> result = v2PolicyService.batchVerifyPermissions(
+                "mingshewhe", Collections.singletonList(action), Collections.singletonList(resource)
+        );
+        System.out.println(result);
+    }
+
+    @Test
+    public void testV2BatchGetPolicyByActionList() {
+        ActionDTO action = new ActionDTO();
+        action.setId("pipeline_list");
+
+        ResourceDTO resource = ResourceDTO.builder()
+                .type("pipeline")
+                .id("p-42f8638d709a4fc9b6e9292f1c232456")
+                .system(iamConfiguration.getSystemId())
+                .build();
+        List<ActionPolicyDTO> actionPolilcyDTOList = v2PolicyService.batchGetPolicyByActionList(
+                "mingshewhe", Collections.singletonList(action), Collections.singletonList(resource)
+        );
+        System.out.println(actionPolilcyDTOList);
     }
 }
