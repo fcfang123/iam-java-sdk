@@ -20,6 +20,7 @@ import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.expression.ExpressionDTO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceDTO;
+import java.util.Map;
 
 public interface PolicyService {
 
@@ -58,4 +59,7 @@ public interface PolicyService {
      * 直接鉴权
      */
     public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO);
+
+    public Map<String, Boolean> batchVerifyPermissions(String username, List<ActionDTO> actionList,
+                                                       List<ResourceDTO> resourceList);
 }

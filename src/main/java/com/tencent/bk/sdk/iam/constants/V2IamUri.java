@@ -58,4 +58,10 @@ public class V2IamUri {
     public static final String V2_SUBSET_GRADE_MANAGER_DELETE = "/api/v2/open/management/systems/%s/subset_managers/%s/";
     // 用户组续期（需要审批版）
     public static final String V2_GROUPS_RENEW_APPLICATIONS = "/api/v2/open/management/systems/%s/groups/-/renew/applications/";
+
+    // v2批量action直接鉴权
+    public static final String V2_POLICY_QUERY_BY_ACTIONS = "/api/v2/policy/systems/%s/auth_by_actions/";
+
+    // v2批量操作策略查询
+    public static final String V2_BATCH_QUERY_POLICY = "/api/v2/policy/systems/%s/query_by_actions/";
 }
