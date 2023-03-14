@@ -350,6 +350,61 @@ public class AuthHelper {
         }
     }
 
+    /**
+     * 按照属性分组获取实例列表
+     * @param expression 表达式
+     * @return 资源按照熟悉分组
+     *
+     * 表达式: {"content":[{"content":[{"content":[{"field":"pipeline._bk_iam_path_","op":"string_contains","value":"/project,greysonfang-rbac-test-113/"},{"field":"pipeline._bk_iam_path_","op":"string_contains","value":"/project,asdasdasd/"}],"op":"OR"},{"content":[{"field":"pipeline._bk_iam_path_","op":"string_contains","value":"/pipeline_group,proxgyem/"},{"field":"pipeline._bk_iam_path_","op":"string_contains","value":"/pipeline_group,mjrjvoem/"}],"op":"OR"},{"field":"pipeline.id","op":"in","value":["p-cb56802bf8eb4b6ebc2b44c77ed545bf","p-a7677e1e77a5414199ff294f5a35162a","p-fee8bc4ad534421e80fefb48d1310bb8","p-4acf760c304d4b99851b188260ff5e45"]}],"op":"OR"},{"field":"pipeline.id","op":"eq","value":"p-42f8638d709a4fc9b6e9292f1c232456"}],"op":"OR"}
+     * 返回: {pipeline=[p-cb56802bf8eb4b6ebc2b44c77ed545bf, p-a7677e1e77a5414199ff294f5a35162a, p-fee8bc4ad534421e80fefb48d1310bb8, p-4acf760c304d4b99851b188260ff5e45, p-42f8638d709a4fc9b6e9292f1c232456], pipeline_group=[proxgyem, mjrjvoem], project=[greysonfang-rbac-test-113, asdasdasd]}
+     */
+    @SuppressWarnings("unchecked")
+    protected static Map<String, List<String>> groupRbacInstanceByType(ExpressionDTO expression) {
+        if (expression.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        String type = null;
+        String attribute = null;
+        if (StringUtils.isNotBlank(expression.getField())) {
+            try {
+                String[] field = expression.getField().split("\\.");
+                type = field[0];
+                attribute = field[1];
+            } catch (Exception e) {
+                throw new IamException(-1, "Unsupported field " + expression.getField());
+            }
+        }
+        Map<String, List<String>> instanceMap = new HashMap<>();
+        switch (expression.getOperator()) {
+            case OR:
+                for (ExpressionDTO subExpression : expression.getContent()) {
+                    Map<String, List<String>> subInstanceMap = groupRbacInstanceByType(subExpression);
+                    subInstanceMap.forEach((subField, subInstance) -> {
+                        instanceMap.computeIfAbsent(subField, key -> new ArrayList<>()).addAll(subInstance);
+                    });
+                }
+                break;
+            case EQUAL:
+                checkParam(type, attribute, expression);
+                instanceMap.computeIfAbsent(type, key -> new ArrayList<>()).add(expression.getValue().toString());
+                break;
+            case STRING_CONTAINS:
+                checkParam(type, attribute, expression);
+                String stringContainsValue = expression.getValue().toString();
+                String[] values = stringContainsValue.substring(1, stringContainsValue.length() - 1).split(",");
+                instanceMap.computeIfAbsent(values[0], key -> new ArrayList<>()).add(values[1]);
+                break;
+            case IN:
+                checkParam(type, attribute, expression);
+                List<String> expressionValue = (List<String>) expression.getValue();
+                instanceMap.computeIfAbsent(type, key -> new ArrayList<>()).addAll(expressionValue);
+                break;
+            default:
+                throw new IamException(-1, "Unrecognized expression operator " + expression.getOperator());
+        }
+        return instanceMap;
+    }
+
     private static void convertValue(ExpressionDTO expression) {
         if (expression.getValue() instanceof List) {
             if (!(((List<?>) expression.getValue()).get(0) instanceof String)) {
@@ -636,5 +691,29 @@ public class AuthHelper {
         List<String> instanceList = calculateInstanceList(expression, resourceType, pathInfoDTO);
         log.debug("get instance list|{}|{}|{}|{}", username, action, pathInfoDTO, instanceList);
         return instanceList;
+    }
+
+    /**
+     * 按照类型分组rbac实例列表
+     * @param username   用户
+     * @param action     操作
+     * @return
+     */
+    public Map<String, List<String>> groupRbacInstanceByType(
+            String username,
+            String action
+    ) {
+        ActionDTO actionDTO = new ActionDTO();
+        actionDTO.setId(action);
+
+        // 本系统资源不传 resource
+        ExpressionDTO expression = policyService.getPolicyByAction(username, actionDTO, null);
+        log.debug("Expression for action|{}||{}|{}", username, action, expression);
+        if (expression == null) {
+            return Collections.emptyMap();
+        }
+        Map<String, List<String>> instanceMap = groupRbacInstanceByType(expression);
+        log.debug("group rbac instance|{}|{}|{}", username, action, instanceMap);
+        return instanceMap;
     }
 }
