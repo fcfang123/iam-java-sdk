@@ -15,10 +15,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
 @Builder
@@ -29,6 +28,11 @@ public class ResourceDTO {
     private String type;
 
     private String id;
+
+    /**
+     * 资源属性
+     */
+    private Map<String, Object> attribute;
 
     /**
      * 仅在批量拉取跨系统依赖资源时有效
