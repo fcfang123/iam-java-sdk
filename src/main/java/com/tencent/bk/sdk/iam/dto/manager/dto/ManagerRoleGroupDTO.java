@@ -11,6 +11,7 @@
 
 package com.tencent.bk.sdk.iam.dto.manager.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencent.bk.sdk.iam.dto.manager.ManagerRoleGroup;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,9 @@ import java.util.List;
 @Builder
 public class ManagerRoleGroupDTO {
     List<ManagerRoleGroup> groups;
+    /*
+    * 不传时默认为true，当迁移时，将该字段设置false，使得用户组可被管理
+    * */
+    @JsonProperty("create_attributes")
+    Boolean createAttributes;
 }
