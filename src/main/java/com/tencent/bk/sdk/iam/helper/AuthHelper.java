@@ -399,6 +399,9 @@ public class AuthHelper {
                 List<String> expressionValue = (List<String>) expression.getValue();
                 instanceMap.computeIfAbsent(type, key -> new ArrayList<>()).addAll(expressionValue);
                 break;
+            case ANY:
+                instanceMap.computeIfAbsent(type, key -> new ArrayList<>()).add("*");
+                break;
             default:
                 throw new IamException(-1, "Unrecognized expression operator " + expression.getOperator());
         }
