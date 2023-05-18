@@ -19,6 +19,7 @@ public class IamException extends RuntimeException {
     private final String errorMsg;
 
     public IamException(long errorCode, String errorMsg) {
+        super(errorMsg);
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
     }
