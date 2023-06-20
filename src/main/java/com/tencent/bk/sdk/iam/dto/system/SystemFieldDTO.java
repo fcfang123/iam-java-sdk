@@ -12,6 +12,7 @@
 package com.tencent.bk.sdk.iam.dto.system;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencent.bk.sdk.iam.dto.CommonActionDTO;
 import com.tencent.bk.sdk.iam.dto.SelectionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionGroupDTO;
@@ -30,6 +31,9 @@ public class SystemFieldDTO {
     private List<ResourceTypeDTO> resourceType;
 
     private List<ActionDTO> actions;
+
+    @JsonProperty("common_actions")
+    private List<CommonActionDTO> commonActions;
 
     @JsonProperty("instance_selections")
     private List<SelectionDTO> instanceSelections;
