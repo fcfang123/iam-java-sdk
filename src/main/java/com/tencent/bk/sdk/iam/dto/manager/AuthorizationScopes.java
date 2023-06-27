@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +29,7 @@ public class AuthorizationScopes {
      */
     String system;
 
-    List<Action> actions;
+    List<Action> actions = new ArrayList<>();
 
-    List<ManagerResources> resources;
+    List<ManagerResources> resources = new ArrayList<>();
 }
