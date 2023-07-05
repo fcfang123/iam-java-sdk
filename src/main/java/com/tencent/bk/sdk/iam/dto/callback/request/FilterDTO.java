@@ -84,18 +84,4 @@ public class FilterDTO {
      */
     private ExpressionDTO expression;
 
-    /**
-     * fetch_instance_list
-     * <p>
-     * 资源实例变更时间的开始时间
-     */
-    @JsonProperty("start_time")
-    private Long startTime;
-    /**
-     * fetch_instance_list
-     * <p>
-     * 资源实例变更时间的结束时间
-     */
-    @JsonProperty("end_time")
-    private Long endTime;
 }

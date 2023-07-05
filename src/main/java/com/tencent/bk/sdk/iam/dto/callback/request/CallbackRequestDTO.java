@@ -26,8 +26,8 @@ public class CallbackRequestDTO {
 
     /**
      * 需要查询资源信息的方式，不同方式对应查询资源的不同信息
-     * 目前值有：list_attr、list_attr_value、 list_instance、fetch_instance_info
-     * list_instance_by_policy、fetch_resource_type_schema、fetch_instance_list
+     * <p>
+     * 目前值有：list_attr、list_attr_value、 list_instance、fetch_instance_info、list_instance_by_policy
      */
     private CallbackMethodEnum method;
 
