@@ -36,7 +36,7 @@ public class InstanceListDTO<T> {
     /**
      * 变更人
      **/
-    private Long updater;
+    private String updater;
     /**
      * 资源拓扑
      **/

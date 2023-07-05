@@ -49,7 +49,7 @@ public enum CallbackMethodEnum {
     /**
      * 根据过滤条件搜索实例
      */
-    FETCH_INSTANCE_LIST("fetch_instance_list "),
+    FETCH_INSTANCE_LIST("fetch_instance_list"),
     /**
      * 获取资源类型 schema 定义
      */
