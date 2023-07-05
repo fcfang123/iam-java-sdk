@@ -1,7 +1,9 @@
 package com.tencent.bk.sdk.iam.dto.callback.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class SchemaData<T> {
     /**
      * 固定值, 资源类型 schema 最外层必须为object类型
