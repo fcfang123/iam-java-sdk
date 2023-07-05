@@ -9,36 +9,46 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package com.tencent.bk.sdk.iam.dto.callback.request;
+package com.tencent.bk.sdk.iam.constants;
 
-import com.tencent.bk.sdk.iam.constants.CallbackMethodEnum;
-import com.tencent.bk.sdk.iam.dto.PageInfoDTO;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
-import lombok.Data;
-
-@Data
-public class CallbackRequestDTO {
+@Getter
+@AllArgsConstructor
+public enum DataTypeEnum {
+    /**
+     * 字符串
+     */
+    STRING("string"),
 
     /**
-     * 查询的资源类型
+     * 数值型
      */
+    NUMBER("number"),
+
+    /**
+     * 数组
+     */
+    ARRAY("array");
+
+    @JsonValue
     private String type;
 
-    /**
-     * 需要查询资源信息的方式，不同方式对应查询资源的不同信息
-     * 目前值有：list_attr、list_attr_value、 list_instance、fetch_instance_info
-     * list_instance_by_policy、fetch_resource_type_schema、fetch_instance_list
-     */
-    private CallbackMethodEnum method;
-
-    /**
-     * 根据不同查询方式(method)，传入不同的过滤参数
-     */
-    private FilterDTO filter;
-
-    /**
-     * 当返回数据需要支持分页时，需要参数
-     */
-    private PageInfoDTO page;
+    @JsonCreator
+    public static DataTypeEnum parseType(String type) {
+        if (StringUtils.isBlank(type)) {
+            return null;
+        }
+        for (DataTypeEnum typeEnum : values()) {
+            if (typeEnum.getType().equals(type)) {
+                return typeEnum;
+            }
+        }
+        return null;
+    }
 
 }

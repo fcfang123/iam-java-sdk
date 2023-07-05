@@ -23,30 +23,37 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum CallbackMethodEnum {
     /**
-     *
+     * 查询某个资源类型可用于配置权限的属性列
      */
     LIST_ATTRIBUTE("list_attr"),
     /**
-     *
+     * 获取一个资源类型某个属性的值列表
      */
     LIST_ATTRIBUTE_VALUE("list_attr_value"),
     /**
-     *
+     * 根据过滤条件查询实例
      */
     LIST_INSTANCE("list_instance"),
     /**
-     *
+     * 批量获取资源实例详情
      */
     FETCH_INSTANCE_INFO("fetch_instance_info"),
     /**
-     *
+     * 根据策略表达式查询资源实例
      */
     LIST_INSTANCE_BY_POLICY("list_instance_by_policy"),
     /**
-     *
+     * 根据过滤条件和搜索关键字查询实例
      */
-    SEARCH_INSTANCE("search_instance")
-    ;
+    SEARCH_INSTANCE("search_instance"),
+    /**
+     * 根据过滤条件搜索实例
+     */
+    FETCH_INSTANCE_LIST("fetch_instance_list "),
+    /**
+     * 获取资源类型 schema 定义
+     */
+    FETCH_RESOURCE_TYPE_SCHEMA("fetch_resource_type_schema");
 
     @JsonValue
     private String method;
