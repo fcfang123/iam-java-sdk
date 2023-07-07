@@ -47,4 +47,13 @@ public class InstanceListDTO<T> {
      **/
     @JsonProperty("data")
     private T schemaProperties;
+    /**
+     * 操作人
+     **/
+    private String operator;
+    /**
+     * 是否删除
+     **/
+    @JsonProperty("is_delete")
+    private Boolean delete;
 }
