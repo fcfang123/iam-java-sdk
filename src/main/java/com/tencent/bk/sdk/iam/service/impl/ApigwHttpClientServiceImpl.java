@@ -41,16 +41,10 @@ import static com.tencent.bk.sdk.iam.constants.HttpHeader.REQUEST_ID;
 @Slf4j
 public class ApigwHttpClientServiceImpl implements HttpClientService {
 
-    private final CloseableHttpClient httpClient;
-    private final IamConfiguration iamConfiguration;
+    private CloseableHttpClient httpClient = DefaultApacheHttpClientBuilder.get().build();
+    private IamConfiguration iamConfiguration;
 
     public ApigwHttpClientServiceImpl(IamConfiguration iamConfiguration) {
-        this.httpClient = DefaultApacheHttpClientBuilder.get().build();
-        this.iamConfiguration = iamConfiguration;
-    }
-
-    public ApigwHttpClientServiceImpl(CloseableHttpClient httpClient, IamConfiguration iamConfiguration) {
-        this.httpClient = httpClient;
         this.iamConfiguration = iamConfiguration;
     }
 
