@@ -51,7 +51,7 @@ public class DefaultApacheHttpClientBuilder implements ApacheHttpClientBuilder {
     private final AtomicBoolean prepared = new AtomicBoolean(false);
     private int connectionRequestTimeout = 3000;
     private int connectionTimeout = 5000;
-    private int soTimeout = 5000;
+    private int soTimeout = 60000;
     private int idleConnTimeout = 60000;
     private int checkWaitTime = 60000;
     private int maxConnPerHost = 10;
@@ -140,9 +140,9 @@ public class DefaultApacheHttpClientBuilder implements ApacheHttpClientBuilder {
     }
 
     /**
-     * 默认NIO的socket超时设置,默认5000ms.
+     * 默认NIO的socket超时设置,默认60S.
      *
-     * @param soTimeout 默认NIO的socket超时设置,默认5000ms.
+     * @param soTimeout 默认NIO的socket超时设置,默认60S.
      * @see java.net.SocketOptions#SO_TIMEOUT
      */
     public void setSoTimeout(int soTimeout) {
