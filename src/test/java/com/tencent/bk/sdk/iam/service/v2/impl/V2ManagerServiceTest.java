@@ -136,9 +136,9 @@ public class V2ManagerServiceTest {
 
     @Test
     public void testV2GetRoleGroupMember() {
-        PageInfoDTO pageInfoDTO = new PageInfoDTO();
-        pageInfoDTO.setLimit(1L);
-        pageInfoDTO.setOffset(0L);
+        V2PageInfoDTO pageInfoDTO = new V2PageInfoDTO();
+        pageInfoDTO.setPageSize(1);
+        pageInfoDTO.setPage(0);
         ManagerGroupMemberVo managerGroupMemberVo = v2ManagerService.getRoleGroupMemberV2(10031, pageInfoDTO);
         System.out.println(managerGroupMemberVo);
     }

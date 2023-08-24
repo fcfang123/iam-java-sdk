@@ -211,8 +211,8 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     }
 
     @Override
-    public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, PageInfoDTO pageInfoDTO) {
-        String url = buildURLPage(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_GET, iamConfiguration.getSystemId(), groupId), pageInfoDTO);
+    public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, V2PageInfoDTO pageInfoDTO) {
+        String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_GET, iamConfiguration.getSystemId(), groupId), pageInfoDTO);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {

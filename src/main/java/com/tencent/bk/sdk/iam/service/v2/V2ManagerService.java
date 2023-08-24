@@ -175,7 +175,7 @@ public interface V2ManagerService {
     /**
      * 用户组成员列表
      */
-    public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, PageInfoDTO pageInfoDTO);
+    public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, V2PageInfoDTO pageInfoDTO);
 
     /**
      * 用户组成员续期(不需要审批版本)
