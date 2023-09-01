@@ -12,9 +12,12 @@
 package com.tencent.bk.sdk.iam.dto.application;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmContentDTO;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmValue;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -27,4 +30,10 @@ public class ApplicationDTO {
     /*申请人，即username*/
     private String applicant;
     private String reason;
+    @JsonProperty("content_template")
+    private ItsmContentDTO contentTemplate;
+    @JsonProperty("group_content")
+    private HashMap<String, ItsmValue> groupContent;
+    @JsonProperty("title_prefix")
+    private String titlePrefix;
 }
