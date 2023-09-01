@@ -17,8 +17,8 @@ import com.tencent.bk.sdk.iam.dto.itsm.ItsmValue;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -33,7 +33,7 @@ public class ApplicationDTO {
     @JsonProperty("content_template")
     private ItsmContentDTO contentTemplate;
     @JsonProperty("group_content")
-    private HashMap<String, ItsmValue> groupContent;
+    private Map<String, ItsmValue> groupContent;
     @JsonProperty("title_prefix")
     private String titlePrefix;
 }
