@@ -13,7 +13,7 @@ package com.tencent.bk.sdk.iam.dto.application;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tencent.bk.sdk.iam.dto.itsm.ItsmContentDTO;
-import com.tencent.bk.sdk.iam.dto.itsm.ItsmValue;
+import com.tencent.bk.sdk.iam.dto.itsm.ItsmStyle;
 import lombok.Builder;
 import lombok.Data;
 
@@ -33,7 +33,7 @@ public class ApplicationDTO {
     @JsonProperty("content_template")
     private ItsmContentDTO contentTemplate;
     @JsonProperty("group_content")
-    private Map<String, ItsmValue> groupContent;
+    private Map<String, Map<String, ItsmStyle>> groupContent;
     @JsonProperty("title_prefix")
     private String titlePrefix;
 }
