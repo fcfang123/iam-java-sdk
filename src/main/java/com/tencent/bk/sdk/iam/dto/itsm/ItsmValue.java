@@ -9,7 +9,7 @@ import java.util.Map;
 @Data
 @Builder
 public class ItsmValue {
-    private String lable;
+    private String label;
     private String scheme;
     private List<Map<String, ItsmStyle>> value;
 }
