@@ -33,7 +33,7 @@ ext {
     set("junitVersion", "5.4.2")
 
     if (System.getProperty("snapshot") == "true") {
-        set('iamVersion', "1.0.35-SNAPSHOT")
+        set('iamVersion', "1.0.36-SNAPSHOT")
     } else {
         set('iamVersion', "1.0.0")
     }
