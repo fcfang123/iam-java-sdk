@@ -24,6 +24,7 @@ import com.tencent.bk.sdk.iam.dto.grant.SimpleGrantDTO;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.service.GrantService;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.SneakyThrows;
@@ -68,6 +69,7 @@ public class GrantServiceImpl implements GrantService {
 
 	@SneakyThrows
 	private GrantPolicyDTO grantAndRemove(String userId, String action, GrantType grantType, List<GrantResourceDTO> resourceList) {
+		AuthRequestContext.setRequestName("GRANT_OR_REVOKE");
 		SimpleGrantDTO grantBaseDto = SimpleGrantDTO.builder().asynchronous(false).operate(grantType.getType()).
 			system(iamConfiguration.getSystemId()).action(GrantActionDTO.builder().id(action).build())
 			.subject(SubjectDTO.builder().id(userId).type("user").build())
@@ -105,6 +107,7 @@ public class GrantServiceImpl implements GrantService {
 		GrantType grantType,
 		List<GrantResourceDTO> resourceList
 	) {
+		AuthRequestContext.setRequestName("BATCH_GRANT_OR_REVOKE");
 		List<GrantActionDTO> batchActions = new ArrayList<>();
 		actions.forEach( it ->
 			batchActions.add(GrantActionDTO.builder().id(it).build())

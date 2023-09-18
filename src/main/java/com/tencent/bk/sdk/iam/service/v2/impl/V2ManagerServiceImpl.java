@@ -44,6 +44,7 @@ import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2ManagerService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.HttpUtils;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
@@ -68,6 +69,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Integer batchCreateRoleGroupV2(Integer gradeManagerId, ManagerRoleGroupDTO managerRoleGroupDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_GRADE_GROUP_CREATE");
             String url = String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_CREATE, iamConfiguration.getSystemId(), gradeManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, managerRoleGroupDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -94,6 +96,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void updateRoleGroupV2(Integer groupId, ManagerRoleGroup managerRoleGroup) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_UPDATE");
             String responseStr = apigwHttpClientService.doHttpPut(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_UPDATE, iamConfiguration.getSystemId(), groupId), managerRoleGroup);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("update V2 manager role group response|{}", responseStr);
@@ -117,6 +120,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void deleteRoleGroupV2(Integer groupId) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_DELETE");
             String responseStr = apigwHttpClientService.doHttpDelete(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_DELETE, iamConfiguration.getSystemId(), groupId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("delete V2 manager role group response|{}", responseStr);
@@ -139,6 +143,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public void grantRoleGroupV2(Integer groupId, AuthorizationScopes authorizationScopes) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_GRANT");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_GRANT, iamConfiguration.getSystemId(), groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, authorizationScopes);
@@ -163,6 +168,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public void createRoleGroupMemberV2(Integer groupId, ManagerMemberGroupDTO managerMemberGroupDTO) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_MEMBER_CREATE");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_CREATE, iamConfiguration.getSystemId(), groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, managerMemberGroupDTO);
@@ -187,6 +193,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public void deleteRoleGroupMemberV2(Integer groupId, String type, String members) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_MEMBER_DEL");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_DEL, iamConfiguration.getSystemId(), groupId, type, members);
         try {
             String responseStr = apigwHttpClientService.doHttpDelete(url);
@@ -212,6 +219,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public ManagerGroupMemberVo getRoleGroupMemberV2(Integer groupId, V2PageInfoDTO pageInfoDTO) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_MEMBER_GET");
         String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_GET, iamConfiguration.getSystemId(), groupId), pageInfoDTO);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -239,6 +247,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void renewalRoleGroupMemberV2(Integer groupId, ManagerMemberGroupDTO managerMemberGroupDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_MEMBER_RENEWAL");
             String responseStr = apigwHttpClientService.doHttpPut(String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_MEMBER_RENEWAL, iamConfiguration.getSystemId(), groupId), managerMemberGroupDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("renewal v2 manager role group response|{}", responseStr);
@@ -262,6 +271,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void renewalRoleGroupMemberApplication(GroupMemberRenewApplicationDTO groupMemberRenewApplicationDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_GROUPS_RENEW_APPLICATIONS");
             String url = String.format(V2IamUri.V2_GROUPS_RENEW_APPLICATIONS, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, groupMemberRenewApplicationDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -285,6 +295,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public List<GroupAction> getRoleGroupActionV2(Integer groupId) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_ACTION_GET");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_ACTION_GET, iamConfiguration.getSystemId(), groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -311,6 +322,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET, iamConfiguration.getSystemId(), groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -338,6 +350,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidMember(String userId, String groupIds) {
         try {
+            AuthRequestContext.setRequestName("V2_VERIFY_GROUP_VALID_MEMBER");
             String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_MEMBER, iamConfiguration.getSystemId(), userId, groupIds);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -366,6 +379,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidDepartment(String departmentId, String groupIds) {
         try {
+            AuthRequestContext.setRequestName("V2_VERIFY_GROUP_VALID_DEPARTMENT");
             String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_DEPARTMENT, departmentId, groupIds);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -394,6 +408,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Integer createSubsetManager(String gradeManagerId, CreateSubsetManagerDTO createSubsetManagerDTO) throws IOException {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_CREATE");
             String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_CREATE, iamConfiguration.getSystemId(), gradeManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, createSubsetManagerDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -420,6 +435,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Integer batchCreateSubsetRoleGroup(Integer subsetManagerId, ManagerRoleGroupDTO managerRoleGroupDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_GROUP_CREATE");
             String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_GROUP_CREATE, iamConfiguration.getSystemId(), subsetManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, managerRoleGroupDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -446,6 +462,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public V2ManagerRoleGroupVO getSubsetManagerRoleGroup(Integer subsetManagerId, V2PageInfoDTO pageInfoDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_GROUP_GET");
             String responseStr = apigwHttpClientService.doHttpGet(v2BuildURLPage(
                 String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_GROUP_GET, iamConfiguration.getSystemId(),
                     subsetManagerId.toString()), pageInfoDTO));
@@ -474,6 +491,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public ManagerDetailResponse getGradeManagerDetail(String gradeManagerId) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_DETAIL_GET");
             String responseStr = apigwHttpClientService.doHttpGet(
                 String.format(V2IamUri.V2_MANAGER_ROLE_DETAIL_GET, iamConfiguration.getSystemId(), gradeManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
@@ -501,6 +519,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_GRADE_GROUP_GET");
             String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_GROUP_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
             if (searchGroupDTO != null) {
                 String s = HttpUtils.joinParams(searchGroupDTO);
@@ -533,6 +552,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public GradeManagerApplicationResponse createGradeManagerApplication(GradeManagerApplicationCreateDTO gradeManagerApplicationCreateDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_GRADE_MANAGER_APPLICATION_CREATE");
             log.info("iam-sdk gradeManagerApplicationCreateDTO : {}", gradeManagerApplicationCreateDTO);
             String url = String.format(V2IamUri.V2_GRADE_MANAGER_APPLICATION_CREATE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, gradeManagerApplicationCreateDTO);
@@ -560,6 +580,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public GradeManagerApplicationResponse updateGradeManagerApplication(String gradeManagerId, GradeManagerApplicationUpdateDTO gradeManagerApplicationUpdateDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_GRADE_MANAGER_APPLICATION_UPDATE");
             String url = String.format(V2IamUri.V2_GRADE_MANAGER_APPLICATION_UPDATE, iamConfiguration.getSystemId(), gradeManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, gradeManagerApplicationUpdateDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -586,6 +607,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Integer createManagerV2(CreateManagerDTO createManagerDTO) throws IOException {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_CREATE");
             String url = String.format(V2IamUri.V2_MANAGER_ROLE_CREATE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, createManagerDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -612,6 +634,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void updateManagerV2(String gradeManagerId, UpdateManagerDTO updateManagerDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_UPDATE");
             String responseStr = apigwHttpClientService.doHttpPut(String.format(V2IamUri.V2_MANAGER_ROLE_UPDATE, iamConfiguration.getSystemId(), gradeManagerId), updateManagerDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("update manager response|{}", responseStr);
@@ -635,6 +658,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void deleteManagerV2(String gradeManagerId) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_DELETE");
             String responseStr = apigwHttpClientService.doHttpDelete(String.format(V2IamUri.V2_MANAGER_ROLE_DELETE, iamConfiguration.getSystemId(), gradeManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("delete V2 grade manager response|{}", responseStr);
@@ -659,6 +683,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public CallbackApplicationResponese handleCallbackApplication(String callbackId, CallbackApplicationDTO callbackApplicationDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_CALLBACK_APPLICATION_HANDLE");
             String url = String.format(V2IamUri.V2_CALLBACK_APPLICATION_HANDLE, iamConfiguration.getSystemId(), callbackId);
             String responseStr = apigwHttpClientService.doHttpPost(url, callbackApplicationDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -686,6 +711,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public Boolean cancelCallbackApplication(String callbackId) {
         try {
+            AuthRequestContext.setRequestName("V2_CALLBACK_APPLICATION_CANCEL");
             String responseStr = apigwHttpClientService.doHttpPut(String.format(V2IamUri.V2_CALLBACK_APPLICATION_CANCEL, iamConfiguration.getSystemId(), callbackId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("cancelCallbackApplication|{}", responseStr);
@@ -712,6 +738,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public ApplicationVO createRoleGroupApplicationV2(ApplicationDTO applicationDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_APPLICATIONS_CREATE");
             String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_APPLICATIONS_CREATE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, applicationDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -738,6 +765,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public ManagerDetailResponse getSubsetManagerDetail(String subsetManagerId) {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_DETAIL_GET");
             String responseStr = apigwHttpClientService.doHttpGet(
                     String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), subsetManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
@@ -765,6 +793,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void updateSubsetManager(String subsetManagerId, UpdateSubsetManagerDTO updateSubsetManagerDTO) {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_UPDATE");
             String url = String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_UPDATE, iamConfiguration.getSystemId(), subsetManagerId);
             String responseStr = apigwHttpClientService.doHttpPost(url, updateSubsetManagerDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -790,6 +819,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     @Override
     public void deleteSubsetManager(String subsetManagerId) {
         try {
+            AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_DELETE");
             String responseStr = apigwHttpClientService.doHttpDelete(String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DELETE, iamConfiguration.getSystemId(), subsetManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("delete V2 subset manager response|{}", responseStr);

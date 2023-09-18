@@ -19,6 +19,7 @@ import com.tencent.bk.sdk.iam.dto.system.SystemDTO;
 import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.SystemService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public Boolean systemCheck(String systemId) {
         try {
+            AuthRequestContext.setRequestName("QUERY_SYSTEM");
             String url = String.format(IamUri.QUERY_SYSTEM, systemId);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -68,6 +70,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public SystemFieldDTO getSystemFieldsInfo(String systemId) {
         try {
+            AuthRequestContext.setRequestName("QUERY_SYSTEM");
             String url = String.format(IamUri.QUERY_SYSTEM, systemId);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -94,6 +97,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public Boolean createSystem(SystemDTO systemInfo) {
         try {
+            AuthRequestContext.setRequestName("ADD_SYSTEM");
             String responseStr = apigwHttpClientService.doHttpPost(IamUri.ADD_SYSTEM, systemInfo);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.info("create system response|{}", responseStr);

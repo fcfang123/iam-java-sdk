@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.HttpHeader;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.http.DefaultApacheHttpClientBuilder;
 import com.tencent.bk.sdk.iam.util.http.HttpDeleteWithBody;
@@ -140,6 +141,7 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
             e.printStackTrace();
         } finally {
             HttpClientUtils.closeQuietly(response);
+            AuthRequestContext.remove();
         }
         return null;
     }

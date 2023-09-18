@@ -18,6 +18,7 @@ import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.dto.system.TokenDTO;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.service.TokenService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +40,7 @@ public class TokenServiceImpl implements TokenService {
 
     private void initToken() {
         try {
+            AuthRequestContext.setRequestName("GET_SYSTEM_TOKEN");
             String getTokenResponse = httpClientService.doHttpGet(String.format(IamUri.GET_SYSTEM_TOKEN, iamConfiguration.getSystemId()));
             if (StringUtils.isNotBlank(getTokenResponse)) {
                 log.debug("Get token response|{}", getTokenResponse);

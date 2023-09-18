@@ -23,6 +23,7 @@ import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.IamActionService;
 import com.tencent.bk.sdk.iam.service.SystemService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +66,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean createAction(List<ActionDTO> actionDTO) {
+        AuthRequestContext.setRequestName("ADD_ACTION");
         String url = String.format(IamUri.ADD_ACTION, iamConfiguration.getSystemId());
         String result = apigwHttpClientService.doHttpPost(url, actionDTO);
         try {
@@ -86,6 +88,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean updateAction(String actionId, ActionUpdateDTO actionUpdateDTO) {
+        AuthRequestContext.setRequestName("UPDATE_ACTION");
         String url = String.format(IamUri.UPDATE_ACTION, iamConfiguration.getSystemId(), actionId);
         String result = apigwHttpClientService.doHttpPut(url, actionUpdateDTO);
         try {
@@ -107,6 +110,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean deleteAction(String actionId, Boolean checkExistence) {
+        AuthRequestContext.setRequestName("DELETE_ACTION");
         String url;
         if (checkExistence == null) {
             url = String.format(IamUri.DELETE_ACTION, iamConfiguration.getSystemId(), actionId, false);
@@ -149,6 +153,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean createActionGroup(List<ActionGroupDTO> actionGroupDTO) {
+        AuthRequestContext.setRequestName("ADD_ACTION_GROUP");
         String url = String.format(IamUri.ADD_ACTION_GROUP, iamConfiguration.getSystemId());
         String result = apigwHttpClientService.doHttpPost(url, actionGroupDTO);
         try {
@@ -170,6 +175,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean updateActionGroup(List<ActionGroupDTO> actionGroupDTO) {
+        AuthRequestContext.setRequestName("UPDATE_ACTION_GROUP");
         String url = String.format(IamUri.UPDATE_ACTION_GROUP, iamConfiguration.getSystemId());
         String result = apigwHttpClientService.doHttpPut(url, actionGroupDTO);
         try {
@@ -198,6 +204,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean createResourceCreatorAction(ResourceCreatorActionsDTO resourceCreatorActionsDTO) {
+        AuthRequestContext.setRequestName("ADD_RESOURCE_CREATOR_ACTIONS");
         String url = String.format(IamUri.ADD_RESOURCE_CREATOR_ACTIONS, iamConfiguration.getSystemId());
         String result = apigwHttpClientService.doHttpPost(url, resourceCreatorActionsDTO);
         try {
@@ -219,6 +226,7 @@ public class ActionServiceImpl implements IamActionService {
 
     @Override
     public Boolean updateResourceCreatorAction(ResourceCreatorActionsDTO resourceCreatorActionsDTO) {
+        AuthRequestContext.setRequestName("UPDATE_RESOURCE_CREATOR_ACTIONS");
         String url = String.format(IamUri.UPDATE_RESOURCE_CREATOR_ACTIONS, iamConfiguration.getSystemId());
         String result = apigwHttpClientService.doHttpPut(url, resourceCreatorActionsDTO);
         try {

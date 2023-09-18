@@ -19,6 +19,7 @@ import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.impl.ApigwHttpClientServiceImpl;
 import com.tencent.bk.sdk.iam.service.v2.V2GrantService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class V2GrantServiceImpl implements V2GrantService {
 
     @Override
     public void v2GrantRoleGroup(Integer groupId, ManagerRoleGroupGrantDTO managerRoleGroupGrantDTO) {
+        AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_GRANT");
         String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_GRANT, iamConfiguration.getSystemId(), groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, managerRoleGroupGrantDTO);
