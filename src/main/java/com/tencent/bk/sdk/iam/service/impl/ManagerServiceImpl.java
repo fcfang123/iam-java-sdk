@@ -31,6 +31,7 @@ import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.ManagerService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Integer createManager(CreateManagerDTO createManagerDTO) {
         try {
+            AuthRequestContext.setRequestName("MANAGER_ROLE");
             String responseStr = apigwHttpClientService.doHttpPost(IamUri.MANAGER_ROLE, createManagerDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("create manager response|{}", responseStr);
@@ -77,6 +79,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ManagerRoleGroupVO getGradeManagerRoleGroup(Integer projectId, PageInfoDTO pageInfoDTO) {
         try {
+            AuthRequestContext.setRequestName("MANAGER_GRADE_GROUP_GET");
             String responseStr = apigwHttpClientService.doHttpGet(buildURLPage(String.format(IamUri.MANAGER_GRADE_GROUP_GET, projectId.toString()), pageInfoDTO));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("get manager role response|{}", responseStr);
@@ -102,6 +105,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Integer batchCreateRoleGroup(Integer projectId, ManagerRoleGroupDTO managerRoleGroupDTO) {
         try {
+            AuthRequestContext.setRequestName("MANAGER_GRADE_GROUP_CREATE");
             String url = String.format(IamUri.MANAGER_GRADE_GROUP_CREATE, projectId);
             String responseStr = apigwHttpClientService.doHttpPost(url, managerRoleGroupDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -128,6 +132,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void updateRoleGroup(Integer roleId, ManagerRoleGroup managerRoleGroup) {
         try {
+            AuthRequestContext.setRequestName("MANAGER_ROLE_GROUP_UPDATE");
             String responseStr = apigwHttpClientService.doHttpPut(String.format(IamUri.MANAGER_ROLE_GROUP_UPDATE, roleId.toString()), managerRoleGroup);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("update manager role group response|{}", responseStr);
@@ -151,6 +156,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void deleteRoleGroup(Integer roleId) {
         try {
+            AuthRequestContext.setRequestName("MANAGER_ROLE_GROUP_DELETE");
             String responseStr = apigwHttpClientService.doHttpDelete(String.format(IamUri.MANAGER_ROLE_GROUP_DELETE, roleId.toString()));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("delete manager role group response|{}", responseStr);
@@ -173,6 +179,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<String> getGradeManagerRoleMember(Integer projectId, PageInfoDTO pageInfoDTO) {
+        AuthRequestContext.setRequestName("MANAGER_GRADE_MEMBER_GET");
         String url = buildURLPage(String.format(IamUri.MANAGER_GRADE_MEMBER_GET, projectId.toString()), pageInfoDTO);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -199,6 +206,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void batchCreateGradeManagerRoleMember(ManagerRoleMemberDTO members, Integer roleId) {
+        AuthRequestContext.setRequestName("MANAGER_GRADE_MEMBER_CREATE");
         String url = String.format(IamUri.MANAGER_GRADE_MEMBER_CREATE, roleId);
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, members);
@@ -223,6 +231,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void deleteGradeManagerRoleMember(String members, Integer projectId) {
+        AuthRequestContext.setRequestName("MANAGER_GRADE_MEMBER_DEL");
         String url = String.format(IamUri.MANAGER_GRADE_MEMBER_DEL, projectId.toString(), members);
         try {
             String responseStr = apigwHttpClientService.doHttpDelete(url);
@@ -247,6 +256,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public ManagerGroupMemberVo getRoleGroupMember(Integer roleId, PageInfoDTO pageInfoDTO) {
+        AuthRequestContext.setRequestName("MANAGER_ROLE_GROUP_MEMBER_GET");
         String url = buildURLPage(String.format(IamUri.MANAGER_ROLE_GROUP_MEMBER_GET, roleId.toString()), pageInfoDTO);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -273,6 +283,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void createRoleGroupMember(Integer roleId, ManagerMemberGroupDTO managerMemberGroupDTO) {
+        AuthRequestContext.setRequestName("MANAGER_ROLE_GROUP_MEMBER_CREATE");
         String url = String.format(IamUri.MANAGER_ROLE_GROUP_MEMBER_CREATE, roleId);
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, managerMemberGroupDTO);
@@ -297,6 +308,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public void deleteRoleGroupMember(Integer roleId, String type, String members) {
+        AuthRequestContext.setRequestName("MANAGER_ROLE_GROUP_MEMBER_DEL");
         String url = String.format(IamUri.MANAGER_ROLE_GROUP_MEMBER_DEL, roleId.toString(), type, members);
         try {
             String responseStr = apigwHttpClientService.doHttpDelete(url);
@@ -321,6 +333,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<CreateVo> getUserRole(String userId, PageInfoDTO pageInfoDTO) {
+        AuthRequestContext.setRequestName("MANAGER_USER_ROLE");
         String url = buildURLPage(IamUri.MANAGER_USER_ROLE, pageInfoDTO);
         url = url + "&system=" + iamConfiguration.getSystemId() + "&user_id=" + userId;
         try {
@@ -348,6 +361,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public Boolean createRolePermission(Integer roleId, AuthorizationScopes permission) {
+        AuthRequestContext.setRequestName("MANAGER_ROLE_PERMISSION");
         String url = String.format(IamUri.MANAGER_ROLE_PERMISSION, roleId.toString());
         try {
             String responseStr = apigwHttpClientService.doHttpPost(url, permission);
@@ -373,6 +387,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<ManagerRoleGroupInfo> getUserGroup(Integer projectId, String userId) {
+        AuthRequestContext.setRequestName("USER_MANAGER_LIST_GET");
         String url = String.format(IamUri.USER_MANAGER_LIST_GET, projectId.toString(), userId);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
@@ -401,6 +416,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public void createResourceRelation(CreateRelationDTO createRelationDTO) {
         try {
+            AuthRequestContext.setRequestName("RESOURCE_CREATOR_ACTION");
             String responseStr = apigwHttpClientService.doHttpPost(IamUri.RESOURCE_CREATOR_ACTION, createRelationDTO);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.info("CreateResourceRelation response|{}", responseStr);

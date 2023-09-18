@@ -15,6 +15,7 @@ import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.V2IamUri;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.service.impl.PolicyServiceImpl;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,21 +32,25 @@ public class V2PolicyServiceImpl extends PolicyServiceImpl {
 
     @Override
     public String getPolicyByActionUrl() {
+        AuthRequestContext.setRequestName("V2_QUERY_POLICY");
         return String.format(V2IamUri.V2_QUERY_POLICY, iamConfiguration.getSystemId());
     }
 
     @Override
     public String getBatchGetPolicyByActionListUrl() {
+        AuthRequestContext.setRequestName("V2_BATCH_QUERY_POLICY");
         return String.format(V2IamUri.V2_BATCH_QUERY_POLICY, iamConfiguration.getSystemId());
     }
 
     @Override
     public String getVerifyPermissionsUrl() {
+        AuthRequestContext.setRequestName("V2_AUTH_POLICY");
         return String.format(V2IamUri.V2_AUTH_POLICY, iamConfiguration.getSystemId());
     }
 
     @Override
     public String getBatchVerifyPermissionsUrl() {
+        AuthRequestContext.setRequestName("V2_POLICY_QUERY_BY_ACTIONS");
         return String.format(V2IamUri.V2_POLICY_QUERY_BY_ACTIONS, iamConfiguration.getSystemId());
     }
 }

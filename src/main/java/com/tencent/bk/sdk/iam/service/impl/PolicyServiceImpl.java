@@ -38,6 +38,7 @@ import com.tencent.bk.sdk.iam.dto.response.QueryPolicyWithDependencyResourceResp
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.service.PolicyService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 
@@ -274,18 +275,22 @@ public class PolicyServiceImpl implements PolicyService {
     }
 
     public String getPolicyByActionUrl() {
+        AuthRequestContext.setRequestName("QUERY_POLICY");
         return IamUri.QUERY_POLICY;
     }
 
     public String getBatchGetPolicyByActionListUrl() {
+        AuthRequestContext.setRequestName("BATCH_QUERY_POLICY");
         return IamUri.BATCH_QUERY_POLICY;
     }
 
     public String getVerifyPermissionsUrl() {
+        AuthRequestContext.setRequestName("AUTH_POLICY");
         return IamUri.AUTH_POLICY;
     }
 
     public String getBatchVerifyPermissionsUrl() {
+        AuthRequestContext.setRequestName("POLICY_AUTH_BY_ACTIONS");
         return IamUri.POLICY_AUTH_BY_ACTIONS;
     }
 }

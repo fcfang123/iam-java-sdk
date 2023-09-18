@@ -21,6 +21,7 @@ import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.IamResourceService;
 import com.tencent.bk.sdk.iam.service.SystemService;
+import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +72,7 @@ public class ResourceServiceImpl implements IamResourceService {
     @Override
     public boolean createResource(List<ResourceTypeDTO> resourceTypeDTO) {
         try {
+            AuthRequestContext.setRequestName("ADD_RESOURCE_TYPE");
             String url = String.format(IamUri.ADD_RESOURCE_TYPE, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, resourceTypeDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -93,6 +95,7 @@ public class ResourceServiceImpl implements IamResourceService {
     @Override
     public boolean updateResource(ResourceTypeDTO resourceTypeDTO, String resourceId) {
         try {
+            AuthRequestContext.setRequestName("UPDATE_OR_DELETE_RESOURCE_TYPE");
             String url = String.format(IamUri.UPDATE_OR_DELETE_RESOURCE_TYPE, iamConfiguration.getSystemId(), resourceId);
             String responseStr = apigwHttpClientService.doHttpPut(url, resourceTypeDTO);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -115,6 +118,7 @@ public class ResourceServiceImpl implements IamResourceService {
     @Override
     public boolean createResourceInstanceSelector(List<SelectionDTO> instanceSelector) {
         try {
+            AuthRequestContext.setRequestName("ADD_INSTANCE_SELECTIONS");
             String url = String.format(IamUri.ADD_INSTANCE_SELECTIONS, iamConfiguration.getSystemId());
             String responseStr = apigwHttpClientService.doHttpPost(url, instanceSelector);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -137,6 +141,7 @@ public class ResourceServiceImpl implements IamResourceService {
     @Override
     public boolean updateResourceInstanceSelector(String selectionId, SelectionDTO instanceSelector) {
         try {
+            AuthRequestContext.setRequestName("UPDATE_INSTANCE_SELECTIONS");
             String url = String.format(IamUri.UPDATE_INSTANCE_SELECTIONS, iamConfiguration.getSystemId(), selectionId);
             String responseStr = apigwHttpClientService.doHttpPut(url, instanceSelector);
             if (StringUtils.isNotBlank(responseStr)) {
