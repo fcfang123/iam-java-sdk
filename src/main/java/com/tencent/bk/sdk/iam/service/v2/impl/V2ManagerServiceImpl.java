@@ -352,7 +352,6 @@ public class V2ManagerServiceImpl implements V2ManagerService {
         return null;
     }
 
-
     @Override
     public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidMember(String userId, String groupIds) {
         try {
