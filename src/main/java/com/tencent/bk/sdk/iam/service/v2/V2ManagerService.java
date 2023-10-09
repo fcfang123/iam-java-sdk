@@ -199,6 +199,11 @@ public interface V2ManagerService {
     public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId);
 
     /**
+     * 查询用户组权限详情,需传递systemId
+     */
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId, String systemId);
+
+    /**
      * 校验用户是否某个用户组的有效成员
      *
      * @param groupIds 1,2,3,4  多个用“,”分割

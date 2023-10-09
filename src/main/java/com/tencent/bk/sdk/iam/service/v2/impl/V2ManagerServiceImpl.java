@@ -322,8 +322,13 @@ public class V2ManagerServiceImpl implements V2ManagerService {
 
     @Override
     public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId) {
+        return getGroupPermissionDetail(groupId, iamConfiguration.getSystemId());
+    }
+
+    @Override
+    public List<GroupPermissionDetailResponseDTO> getGroupPermissionDetail(Integer groupId, String systemId) {
         AuthRequestContext.setRequestName("V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET");
-        String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET, iamConfiguration.getSystemId(), groupId);
+        String url = String.format(V2IamUri.V2_MANAGER_ROLE_GROUP_PERMISSION_DETAIL_GET, systemId, groupId);
         try {
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
@@ -347,6 +352,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
         return null;
     }
 
+
     @Override
     public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidMember(String userId, String groupIds) {
         try {
@@ -356,9 +362,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify group valid member response|{}", responseStr);
                 ResponseDTO<Map<Integer, GroupMemberVerifyInfo>> responseInfo =
-                        JsonUtil.fromJson(responseStr,
-                                new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
-                                });
+                    JsonUtil.fromJson(responseStr,
+                        new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
+                        });
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                     return responseInfo.getData();
@@ -385,9 +391,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify group valid department response|{}", responseStr);
                 ResponseDTO<Map<Integer, GroupMemberVerifyInfo>> responseInfo =
-                        JsonUtil.fromJson(responseStr,
-                                new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
-                                });
+                    JsonUtil.fromJson(responseStr,
+                        new TypeReference<ResponseDTO<Map<Integer, GroupMemberVerifyInfo>>>() {
+                        });
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                     return responseInfo.getData();
@@ -767,12 +773,12 @@ public class V2ManagerServiceImpl implements V2ManagerService {
         try {
             AuthRequestContext.setRequestName("V2_SUBSET_GRADE_MANAGER_DETAIL_GET");
             String responseStr = apigwHttpClientService.doHttpGet(
-                    String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), subsetManagerId));
+                String.format(V2IamUri.V2_SUBSET_GRADE_MANAGER_DETAIL_GET, iamConfiguration.getSystemId(), subsetManagerId));
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("get subeset manager detail response|{}", responseStr);
                 ResponseDTO<ManagerDetailResponse> responseInfo =
-                        JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<ManagerDetailResponse>>() {
-                        });
+                    JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<ManagerDetailResponse>>() {
+                    });
                 if (responseInfo != null) {
                     ResponseUtil.checkResponse(responseInfo);
                     return responseInfo.getData();
