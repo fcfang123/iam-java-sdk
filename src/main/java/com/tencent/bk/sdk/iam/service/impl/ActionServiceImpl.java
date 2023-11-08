@@ -20,7 +20,6 @@ import com.tencent.bk.sdk.iam.dto.action.ActionUpdateDTO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceCreatorActionsDTO;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
 import com.tencent.bk.sdk.iam.dto.system.SystemFieldDTO;
-import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.IamActionService;
 import com.tencent.bk.sdk.iam.service.SystemService;
 import com.tencent.bk.sdk.iam.util.AuthRequestContext;
@@ -68,8 +67,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean createAction(List<ActionDTO> actionDTO) {
         AuthRequestContext.setRequestName("ADD_ACTION");
         String url = String.format(IamUri.ADD_ACTION, iamConfiguration.getSystemId());
-        String result = apigwHttpClientService.doHttpPost(url, actionDTO);
         try {
+            String result = apigwHttpClientService.doHttpPost(url, actionDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -78,10 +77,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("create action result is empty {}|{}", actionDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("create action fail {}|{}", actionDTO, iamE);
         } catch (Exception e) {
-            log.warn("create action fail {}|{}", actionDTO, e);
+            log.warn("create action fail {}", actionDTO, e);
         }
         return false;
     }
@@ -90,8 +87,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean updateAction(String actionId, ActionUpdateDTO actionUpdateDTO) {
         AuthRequestContext.setRequestName("UPDATE_ACTION");
         String url = String.format(IamUri.UPDATE_ACTION, iamConfiguration.getSystemId(), actionId);
-        String result = apigwHttpClientService.doHttpPut(url, actionUpdateDTO);
         try {
+            String result = apigwHttpClientService.doHttpPut(url, actionUpdateDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -100,10 +97,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("update action result is empty {}|{}", actionUpdateDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("update action fail {}|{}", actionUpdateDTO, iamE);
         } catch (Exception e) {
-            log.warn("update action fail {}|{}", actionUpdateDTO, e);
+            log.warn("update action fail {}", actionUpdateDTO, e);
         }
         return false;
     }
@@ -117,8 +112,8 @@ public class ActionServiceImpl implements IamActionService {
         } else {
             url = String.format(IamUri.DELETE_ACTION, iamConfiguration.getSystemId(), actionId, checkExistence);
         }
-        String result = apigwHttpClientService.doHttpDelete(url);
         try {
+            String result = apigwHttpClientService.doHttpDelete(url);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -127,10 +122,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("delete action result is empty {}|{}", actionId, result);
             }
-        } catch (IamException iamE) {
-            log.warn("delete action fail {}|{}", actionId, iamE);
         } catch (Exception e) {
-            log.warn("delete action fail {}|{}", actionId, e);
+            log.warn("delete action fail {}", actionId, e);
         }
         return false;
     }
@@ -155,8 +148,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean createActionGroup(List<ActionGroupDTO> actionGroupDTO) {
         AuthRequestContext.setRequestName("ADD_ACTION_GROUP");
         String url = String.format(IamUri.ADD_ACTION_GROUP, iamConfiguration.getSystemId());
-        String result = apigwHttpClientService.doHttpPost(url, actionGroupDTO);
         try {
+            String result = apigwHttpClientService.doHttpPost(url, actionGroupDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -165,10 +158,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("create action group result is empty {}|{}", actionGroupDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("create action group fail {}|{}", actionGroupDTO, iamE);
         } catch (Exception e) {
-            log.warn("create action group fail {}|{}", actionGroupDTO, e);
+            log.warn("create action group fail {}", actionGroupDTO, e);
         }
         return false;
     }
@@ -177,8 +168,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean updateActionGroup(List<ActionGroupDTO> actionGroupDTO) {
         AuthRequestContext.setRequestName("UPDATE_ACTION_GROUP");
         String url = String.format(IamUri.UPDATE_ACTION_GROUP, iamConfiguration.getSystemId());
-        String result = apigwHttpClientService.doHttpPut(url, actionGroupDTO);
         try {
+            String result = apigwHttpClientService.doHttpPut(url, actionGroupDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -187,10 +178,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("update action group result is empty {}|{}", actionGroupDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("update action group fail {}|{}", actionGroupDTO, iamE);
         } catch (Exception e) {
-            log.warn("update action group fail {}|{}", actionGroupDTO, e);
+            log.warn("update action group fail {}", actionGroupDTO, e);
         }
         return false;
     }
@@ -206,8 +195,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean createResourceCreatorAction(ResourceCreatorActionsDTO resourceCreatorActionsDTO) {
         AuthRequestContext.setRequestName("ADD_RESOURCE_CREATOR_ACTIONS");
         String url = String.format(IamUri.ADD_RESOURCE_CREATOR_ACTIONS, iamConfiguration.getSystemId());
-        String result = apigwHttpClientService.doHttpPost(url, resourceCreatorActionsDTO);
         try {
+            String result = apigwHttpClientService.doHttpPost(url, resourceCreatorActionsDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -216,10 +205,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("create resourceCreatorActions result is empty {}|{}", resourceCreatorActionsDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("create resourceCreatorActions fail {}|{}", resourceCreatorActionsDTO, iamE);
         } catch (Exception e) {
-            log.warn("create resourceCreatorActions fail {}|{}", resourceCreatorActionsDTO, e);
+            log.warn("create resourceCreatorActions fail {}", resourceCreatorActionsDTO, e);
         }
         return false;
     }
@@ -228,8 +215,8 @@ public class ActionServiceImpl implements IamActionService {
     public Boolean updateResourceCreatorAction(ResourceCreatorActionsDTO resourceCreatorActionsDTO) {
         AuthRequestContext.setRequestName("UPDATE_RESOURCE_CREATOR_ACTIONS");
         String url = String.format(IamUri.UPDATE_RESOURCE_CREATOR_ACTIONS, iamConfiguration.getSystemId());
-        String result = apigwHttpClientService.doHttpPut(url, resourceCreatorActionsDTO);
         try {
+            String result = apigwHttpClientService.doHttpPut(url, resourceCreatorActionsDTO);
             if (!result.isEmpty()) {
                 ResponseDTO<Object> response = JsonUtil.fromJson(result, new TypeReference<ResponseDTO<Object>>() {
                 });
@@ -238,10 +225,8 @@ public class ActionServiceImpl implements IamActionService {
             } else {
                 log.warn("update resourceCreatorActions result is empty {}|{}", resourceCreatorActionsDTO, result);
             }
-        } catch (IamException iamE) {
-            log.warn("update resourceCreatorActions fail {}|{}", resourceCreatorActionsDTO, iamE);
         } catch (Exception e) {
-            log.warn("update resourceCreatorActions fail {}|{}", resourceCreatorActionsDTO, e);
+            log.warn("update resourceCreatorActions fail {}", resourceCreatorActionsDTO, e);
         }
         return false;
     }

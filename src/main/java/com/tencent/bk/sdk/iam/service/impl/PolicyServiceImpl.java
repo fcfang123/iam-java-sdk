@@ -236,7 +236,7 @@ public class PolicyServiceImpl implements PolicyService {
             log.error("verify permissions response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("verify permissions response failed|{}", e);
+            log.error("verify permissions response failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -249,27 +249,35 @@ public class PolicyServiceImpl implements PolicyService {
         if (log.isDebugEnabled()) {
             log.debug("Batch verify policy by action list request|{}|{}|{}|{}", username, actionList, resourceList, batchQueryPolicyRequest);
         }
-        String actionPolicyResponse = httpClientService.doHttpPost(getBatchVerifyPermissionsUrl(), batchQueryPolicyRequest);
-        if (StringUtils.isNotBlank(actionPolicyResponse)) {
-            if (log.isDebugEnabled()) {
-                log.debug("Batch verify policy by action list response|{}", actionPolicyResponse);
+        try {
+            String actionPolicyResponse = httpClientService.doHttpPost(getBatchVerifyPermissionsUrl(), batchQueryPolicyRequest);
+            if (StringUtils.isNotBlank(actionPolicyResponse)) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Batch verify policy by action list response|{}", actionPolicyResponse);
+                }
+                ResponseDTO<Map<String, Boolean>> responseInfo;
+                try {
+                    responseInfo = JsonUtil.fromJson(actionPolicyResponse,
+                            new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
+                            });
+                } catch (IOException e) {
+                    log.error("Error while parse action policy response!|{}|{}|{}|{}", username, actionList, resourceList,
+                            actionPolicyResponse, e);
+                    return null;
+                }
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData();
+                }
+            } else {
+                log.warn("Batch verify policy by action list got empty response!");
             }
-            ResponseDTO<Map<String, Boolean>> responseInfo;
-            try {
-                responseInfo = JsonUtil.fromJson(actionPolicyResponse,
-                        new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
-                        });
-            } catch (IOException e) {
-                log.error("Error while parse action policy response!|{}|{}|{}|{}", username, actionList, resourceList,
-                        actionPolicyResponse, e);
-                return null;
-            }
-            if (responseInfo != null) {
-                ResponseUtil.checkResponse(responseInfo);
-                return responseInfo.getData();
-            }
-        } else {
-            log.warn("Batch verify policy by action list got empty response!");
+        } catch (IamException iamException) {
+            log.error("batch verify permissions response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
+            throw iamException;
+        } catch (Exception e) {
+            log.error("batch verify permissions response failed", e);
+            throw new RuntimeException(e);
         }
         return null;
     }

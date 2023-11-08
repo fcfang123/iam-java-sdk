@@ -87,7 +87,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create v2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create v2 manager role group failed|{}", e);
+            log.error("create v2 manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -112,7 +112,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("update V2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update V2 manager role group failed|{}", e);
+            log.error("update V2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -136,7 +136,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("delete V2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 manager role group failed|{}", e);
+            log.error("delete V2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -161,7 +161,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("grant V2 role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("grant V2 role group failed|{}", e);
+            log.error("grant V2 role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -186,7 +186,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create V2 role group member failed|{}", e);
+            log.error("create V2 role group member failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -212,7 +212,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("delete V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 role group member failed|{}", e);
+            log.error("delete V2 role group member failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -238,7 +238,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get V2 role group member failed|{}", e);
+            log.error("get V2 role group member failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -263,7 +263,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("renewal v2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("renewal v2 manager role group failed|{}", e);
+            log.error("renewal v2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -288,7 +288,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("renewal role group member application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("renewal role group member application failed|{}", e);
+            log.error("renewal role group member application failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -314,7 +314,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get V2 role group action failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get V2 role group action failed|{}", e);
+            log.error("get V2 role group action failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -346,7 +346,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get Group Permission Detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get Group Permission Detail failed|{}", e);
+            log.error("get Group Permission Detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -375,7 +375,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("verify group valid member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("verify group valid member failed|{}", e);
+            log.error("verify group valid member failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -404,7 +404,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("verify group valid department failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("verify group valid department failed|{}", e);
+            log.error("verify group valid department failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -431,7 +431,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create subset manager failed|{}", e);
+            log.error("create subset manager failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -458,7 +458,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create subset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create subset manager role group failed|{}", e);
+            log.error("create subset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -487,7 +487,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get subeset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager role group failed|{}", e);
+            log.error("get subeset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -515,7 +515,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get grade manager detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get grade manager detail failed|{}", e);
+            log.error("get grade manager detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -548,7 +548,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get subeset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager role group failed|{}", e);
+            log.error("get subeset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -576,7 +576,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create grade manager application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create grade manager application failed|{}", e);
+            log.error("create grade manager application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -603,7 +603,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("update grade manager application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update grade manager application failed|{}", e);
+            log.error("update grade manager application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -630,7 +630,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create manager failed|{}", e);
+            log.error("create manager failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -655,7 +655,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("update manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update manager failed|{}", e);
+            log.error("update manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -679,7 +679,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("delete V2 grade manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 grade manager failed|{}", e);
+            log.error("delete V2 grade manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -707,7 +707,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("handle callback application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("handle callback application failed|{}", e);
+            log.error("handle callback application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -734,7 +734,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("cancelCallbackApplication|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("cancelCallbackApplication error ! |{}", e);
+            log.error("cancelCallbackApplication error", e);
             throw new RuntimeException(e);
         }
         return false;
@@ -761,7 +761,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("create v2  role group application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create v2  role group application failed|{}", e);
+            log.error("create v2  role group application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -789,7 +789,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("get subeset manager detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager detail failed|{}", e);
+            log.error("get subeset manager detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -816,7 +816,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("update subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update subset manager failed|{}", e);
+            log.error("update subset manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -841,7 +841,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             log.error("delete V2 subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 subset manager failed|{}", e);
+            log.error("delete V2 subset manager failed", e);
             throw new RuntimeException(e);
         }
     }

@@ -14,6 +14,7 @@ package com.tencent.bk.sdk.iam.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.HttpHeader;
+import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.tencent.bk.sdk.iam.constants.HttpHeader.REQUEST_ID;
+import static com.tencent.bk.sdk.iam.constants.IamErrorCode.UNKNOWN_ERROR;
 
 @Slf4j
 public class ApigwHttpClientServiceImpl implements HttpClientService {
@@ -70,7 +72,7 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
             log.debug("Post request, uri:{}, body:{}", uri, jsonBody);
             postRequest.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
         } catch (JsonProcessingException e) {
-            log.warn("Json encode failed!|{}|{}|{}", uri, body, e);
+            log.warn("Json encode failed!|{}|{}", uri, body, e);
             return null;
         }
         buildAuthHeader(postRequest);
@@ -114,7 +116,7 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
             log.debug("delete request, uri:{}, body:{}", uri, jsonBody);
             deleteWithBodyRequest.setEntity(new StringEntity(jsonBody, ContentType.APPLICATION_JSON));
         } catch (JsonProcessingException e) {
-            log.warn("Json encode failed!|{}|{}|{}", uri, body, e);
+            log.warn("Json encode failed!|{}|{}", uri, body, e);
             return null;
         }
         buildAuthHeader(deleteWithBodyRequest);
@@ -124,7 +126,7 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
     private String doExecuteRequest(HttpRequestBase request) {
         CloseableHttpResponse response = null;
         try {
-            log.info("doExecuteRequest {}", request);
+            log.debug("doExecuteRequest {}", request);
             response = httpClient.execute(request);
             log.info("doExecuteResponse|{}", response);
             if (response != null) {
@@ -135,15 +137,15 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
                 return responseString;
             } else {
                 log.warn("Http response is null!");
+                throw new IamException(UNKNOWN_ERROR, "No Response Content");
             }
         } catch (IOException e) {
-            log.warn("http exception uri:{}, {}", request.getURI(), e);
-            e.printStackTrace();
+            log.error("http exception uri:{}", request.getURI(), e);
+            throw new IamException(UNKNOWN_ERROR, e.getMessage());
         } finally {
             HttpClientUtils.closeQuietly(response);
             AuthRequestContext.remove();
         }
-        return null;
     }
 
     private String buildUrl(String uri) {
