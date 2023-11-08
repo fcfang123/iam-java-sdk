@@ -84,10 +84,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create v2 manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create v2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create v2 manager role group failed|{}", e);
+            log.error("create v2 manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -109,10 +108,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("update V2 manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("update V2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update V2 manager role group failed|{}", e);
+            log.error("update V2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -133,10 +131,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("delete V2 manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("delete V2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 manager role group failed|{}", e);
+            log.error("delete V2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -158,10 +155,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("grant V2 role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("grant V2 role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("grant V2 role group failed|{}", e);
+            log.error("grant V2 role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -183,10 +179,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create V2 role group member got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create V2 role group member failed|{}", e);
+            log.error("create V2 role group member failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -209,10 +204,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("delete V2 role group member got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("delete V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 role group member failed|{}", e);
+            log.error("delete V2 role group member failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -235,10 +229,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get V2 role group member got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get V2 role group member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get V2 role group member failed|{}", e);
+            log.error("get V2 role group member failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -260,10 +253,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("renewal v2 manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("renewal v2 manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("renewal v2 manager role group failed|{}", e);
+            log.error("renewal v2 manager role group failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -285,10 +277,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("renewal role group member application got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("renewal role group member application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("renewal role group member application failed|{}", e);
+            log.error("renewal role group member application failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -311,10 +302,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get V2 role group action got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get V2 role group action failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get V2 role group action failed|{}", e);
+            log.error("get V2 role group action failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -343,10 +333,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get Group Permission Detail got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get Group Permission Detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get Group Permission Detail failed|{}", e);
+            log.error("get Group Permission Detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -372,10 +361,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("verify group valid member got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("verify group valid member failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("verify group valid member failed|{}", e);
+            log.error("verify group valid member failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -385,7 +373,7 @@ public class V2ManagerServiceImpl implements V2ManagerService {
     public Map<Integer, GroupMemberVerifyInfo> verifyGroupValidDepartment(String departmentId, String groupIds) {
         try {
             AuthRequestContext.setRequestName("V2_VERIFY_GROUP_VALID_DEPARTMENT");
-            String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_DEPARTMENT, departmentId, groupIds);
+            String url = String.format(V2IamUri.V2_VERIFY_GROUP_VALID_DEPARTMENT, iamConfiguration.getSystemId(), departmentId, groupIds);
             String responseStr = apigwHttpClientService.doHttpGet(url);
             if (StringUtils.isNotBlank(responseStr)) {
                 log.debug("verify group valid department response|{}", responseStr);
@@ -401,10 +389,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("verify group valid department got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("verify group valid department failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("verify group valid department failed|{}", e);
+            log.error("verify group valid department failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -428,10 +415,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create subset manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create subset manager failed|{}", e);
+            log.error("create subset manager failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -455,10 +441,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create subset manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create subset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create subset manager role group failed|{}", e);
+            log.error("create subset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -484,10 +469,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get subeset manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get subeset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager role group failed|{}", e);
+            log.error("get subeset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -512,10 +496,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get grade manager detail got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get grade manager detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get grade manager detail failed|{}", e);
+            log.error("get grade manager detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -545,10 +528,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get subeset manager role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get subeset manager role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager role group failed|{}", e);
+            log.error("get subeset manager role group failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -573,10 +555,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create grade manager application got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create grade manager application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create grade manager application failed|{}", e);
+            log.error("create grade manager application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -600,10 +581,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("update grade manager application got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("update grade manager application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update grade manager application failed|{}", e);
+            log.error("update grade manager application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -627,10 +607,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create manager failed|{}", e);
+            log.error("create manager failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -652,10 +631,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("update manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("update manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update manager failed|{}", e);
+            log.error("update manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -676,10 +654,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("delete V2 grade manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("delete V2 grade manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 grade manager failed|{}", e);
+            log.error("delete V2 grade manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -704,10 +681,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("handle callback application got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("handle callback application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("handle callback application failed|{}", e);
+            log.error("handle callback application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -731,10 +707,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("cancelCallbackApplication got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("cancelCallbackApplication|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("cancelCallbackApplication error ! |{}", e);
+            log.error("cancelCallbackApplication error", e);
             throw new RuntimeException(e);
         }
         return false;
@@ -758,10 +733,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("create v2  role group application got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("create v2  role group application failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("create v2  role group application failed|{}", e);
+            log.error("create v2  role group application failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -786,10 +760,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("get subeset manager detail got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("get subeset manager detail failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("get subeset manager detail failed|{}", e);
+            log.error("get subeset manager detail failed", e);
             throw new RuntimeException(e);
         }
         return null;
@@ -813,10 +786,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("update subset manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("update subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("update subset manager failed|{}", e);
+            log.error("update subset manager failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -838,10 +810,9 @@ public class V2ManagerServiceImpl implements V2ManagerService {
                 log.warn("delete V2 subset manager got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("delete V2 subset manager failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
-            log.error("delete V2 subset manager failed|{}", e);
+            log.error("delete V2 subset manager failed", e);
             throw new RuntimeException(e);
         }
     }

@@ -11,34 +11,32 @@
 
 package com.tencent.bk.sdk.iam.service.impl;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.HttpHeader;
+import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.http.DefaultApacheHttpClientBuilder;
-
 import com.tencent.bk.sdk.iam.util.http.HttpDeleteWithBody;
-import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Consts;
-import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+
+import static com.tencent.bk.sdk.iam.constants.IamErrorCode.UNKNOWN_ERROR;
 
 @Slf4j
 public class DefaultHttpClientServiceImpl implements HttpClientService {
@@ -117,8 +115,9 @@ public class DefaultHttpClientServiceImpl implements HttpClientService {
     }
 
     private String doExecuteRequest(HttpRequestBase request) {
+        CloseableHttpResponse response = null;
         try {
-            CloseableHttpResponse response = httpClient.execute(request);
+            response = httpClient.execute(request);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
                 String responseString = response.getEntity() == null ? null : EntityUtils.toString(response.getEntity(), Consts.UTF_8);
@@ -126,14 +125,15 @@ public class DefaultHttpClientServiceImpl implements HttpClientService {
                 return responseString;
             } else {
                 log.warn("Http response is null!");
+                throw new IamException(UNKNOWN_ERROR, "No Response Content");
             }
         } catch (IOException e) {
-            log.warn("http exception uri:{}, {}", request.getURI(), e);
-            e.printStackTrace();
+            log.warn("http exception uri:{}", request.getURI(), e);
+            throw new IamException(UNKNOWN_ERROR, e.getMessage());
         } finally {
+            HttpClientUtils.closeQuietly(response);
             AuthRequestContext.remove();
         }
-        return null;
     }
 
     private String buildUrl(String uri) {

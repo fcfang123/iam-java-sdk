@@ -402,7 +402,7 @@ public class V2ManagerServiceTest {
         value.put("organization", ItsmStyle.builder().value("test").build());
         value.put("authSecrecy", ItsmStyle.builder().value("test").build());
         value.put("subjectScopes", ItsmStyle.builder().value("test").build());
-        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
+        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").label("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
 
         GradeManagerApplicationCreateDTO build = GradeManagerApplicationCreateDTO.builder().name("fc-test-rbac412126").description("fc-test-rbac121241")
@@ -460,7 +460,7 @@ public class V2ManagerServiceTest {
         value.put("organization", ItsmStyle.builder().value("test").build());
         value.put("authSecrecy", ItsmStyle.builder().value("test").build());
         value.put("subjectScopes", ItsmStyle.builder().value("test").build());
-        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").lable("项目创建审批").value(Arrays.asList(value)).build();
+        ItsmValue itsmValue = ItsmValue.builder().scheme("content_table").label("项目创建审批").value(Arrays.asList(value)).build();
         ItsmContentDTO itsmContentDTO = ItsmContentDTO.builder().formData(Arrays.asList(itsmValue)).schemes(scheme).build();
         GradeManagerApplicationUpdateDTO build = GradeManagerApplicationUpdateDTO.builder().name("test-134").description("123")
             .members(Arrays.asList("greysonfang"))
