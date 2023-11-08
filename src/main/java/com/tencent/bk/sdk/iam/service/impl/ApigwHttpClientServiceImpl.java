@@ -128,7 +128,7 @@ public class ApigwHttpClientServiceImpl implements HttpClientService {
         try {
             log.debug("doExecuteRequest {}", request);
             response = httpClient.execute(request);
-            log.info("doExecuteResponse|{}", response);
+            log.debug("doExecuteResponse|{}", response);
             if (response != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
                 String requestId = response.getFirstHeader(REQUEST_ID).getValue();

@@ -233,7 +233,6 @@ public class PolicyServiceImpl implements PolicyService {
                 log.warn("verify permissions got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("verify permissions response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
             log.error("verify permissions response failed", e);
@@ -273,7 +272,6 @@ public class PolicyServiceImpl implements PolicyService {
                 log.warn("Batch verify policy by action list got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("batch verify permissions response failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
             log.error("batch verify permissions response failed", e);

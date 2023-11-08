@@ -52,7 +52,6 @@ public class V2GrantServiceImpl implements V2GrantService {
                 log.warn("grant V2 role group got empty response!");
             }
         } catch (IamException iamException) {
-            log.error("grant V2 role group failed|{}|{}", iamException.getErrorCode(), iamException.getErrorMsg());
             throw iamException;
         } catch (Exception e) {
             log.error("grant V2 role group failed", e);
