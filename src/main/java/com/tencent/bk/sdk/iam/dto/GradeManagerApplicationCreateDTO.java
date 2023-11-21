@@ -52,7 +52,7 @@ public class GradeManagerApplicationCreateDTO {
     private Boolean syncPerm;
 
     /**
-     * 	如果sync_perm为true, 可以自定义用户组名称, 默认为空
+     * 如果sync_perm为true, 可以自定义用户组名称, 默认为空
      */
     @JsonProperty("group_name")
     private String groupName;
@@ -82,4 +82,9 @@ public class GradeManagerApplicationCreateDTO {
      * 透传到ITSM审批单的内容, 默认为空
      * */
     private ItsmContentDTO content;
+    /*
+     * 是否创建用户组的同步人员模版, 默认false
+     * */
+    @JsonProperty("sync_subject_template")
+    private Boolean syncSubjectTemplate;
 }
