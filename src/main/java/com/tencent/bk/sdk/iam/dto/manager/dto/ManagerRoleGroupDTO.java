@@ -23,8 +23,13 @@ import java.util.List;
 public class ManagerRoleGroupDTO {
     List<ManagerRoleGroup> groups;
     /*
-    * 不传时默认为true，当迁移时，将该字段设置false，使得用户组可被管理
-    * */
+     * 不传时默认为true，当迁移时，将该字段设置false，使得用户组可被管理
+     * */
     @JsonProperty("create_attributes")
     Boolean createAttributes;
+    /*
+     * 是否创建用户组的同步人员模版, 默认false
+     * */
+    @JsonProperty("sync_subject_template")
+    Boolean syncSubjectTemplate;
 }
