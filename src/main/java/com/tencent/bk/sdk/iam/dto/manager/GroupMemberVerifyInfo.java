@@ -30,4 +30,9 @@ public class GroupMemberVerifyInfo {
      * */
     @JsonProperty("created_at")
     private String createdAt;
+    /*
+     * 是否直接加入
+     * */
+    @JsonProperty("is_direct_added")
+    private String directAdded;
 }
