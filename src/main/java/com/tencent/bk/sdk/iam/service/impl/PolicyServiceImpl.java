@@ -11,6 +11,9 @@
 
 package com.tencent.bk.sdk.iam.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import com.tencent.bk.sdk.iam.exception.IamException;
 import java.io.IOException;
@@ -18,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
@@ -42,6 +46,7 @@ import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +56,11 @@ public class PolicyServiceImpl implements PolicyService {
 
     private final IamConfiguration iamConfiguration;
     private final HttpClientService httpClientService;
+
+    private final Cache<String, Boolean> permissionCache = CacheBuilder.newBuilder()
+            .maximumSize(50000)
+            .expireAfterWrite(1, TimeUnit.MINUTES)
+            .build();
 
     public PolicyServiceImpl(IamConfiguration iamConfiguration, HttpClientService httpClientService) {
         this.iamConfiguration = iamConfiguration;
@@ -203,7 +213,7 @@ public class PolicyServiceImpl implements PolicyService {
             try {
                 responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<List<UserGroupDTO>>>() {});
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("get manager role response failed", e);
             }
             if (responseInfo != null) {
                 ResponseUtil.checkResponse(responseInfo);
@@ -220,17 +230,27 @@ public class PolicyServiceImpl implements PolicyService {
     @Override
     public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO) {
         try {
-            String responseStr = httpClientService.doHttpPost(getVerifyPermissionsUrl(), queryPolicyDTO);
-            if (StringUtils.isNotBlank(responseStr)) {
-                log.debug("verify permissions response|{}", responseStr);
-                ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
-                });
-                if (responseInfo != null) {
-                    ResponseUtil.checkResponse(responseInfo);
-                    return responseInfo.getData().get("allowed");
+            String cacheKey = getPermissionCacheKey(queryPolicyDTO);
+            Boolean cacheResult = permissionCache.getIfPresent(cacheKey);
+            if (cacheResult == null) {
+                String responseStr = httpClientService.doHttpPost(getVerifyPermissionsUrl(), queryPolicyDTO);
+                if (StringUtils.isNotBlank(responseStr)) {
+                    log.debug("verify permissions response|{}", responseStr);
+                    ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
+                    });
+                    if (responseInfo != null) {
+                        ResponseUtil.checkResponse(responseInfo);
+                        Boolean requestResult = responseInfo.getData().get("allowed");
+                        if (requestResult) {
+                            permissionCache.put(cacheKey, true);
+                        }
+                        return requestResult;
+                    }
+                } else {
+                    log.warn("verify permissions got empty response!");
                 }
             } else {
-                log.warn("verify permissions got empty response!");
+                return cacheResult;
             }
         } catch (IamException iamException) {
             throw iamException;
@@ -298,5 +318,9 @@ public class PolicyServiceImpl implements PolicyService {
     public String getBatchVerifyPermissionsUrl() {
         AuthRequestContext.setRequestName("POLICY_AUTH_BY_ACTIONS");
         return IamUri.POLICY_AUTH_BY_ACTIONS;
+    }
+
+    private String getPermissionCacheKey(V2QueryPolicyDTO queryPolicyDTO) throws JsonProcessingException {
+        return DigestUtils.md5Hex(JsonUtil.toJson(queryPolicyDTO));
     }
 }
