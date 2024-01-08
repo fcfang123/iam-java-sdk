@@ -12,17 +12,6 @@
 package com.tencent.bk.sdk.iam.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
-import com.tencent.bk.sdk.iam.exception.IamException;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.tencent.bk.sdk.iam.config.IamConfiguration;
 import com.tencent.bk.sdk.iam.constants.IamUri;
@@ -30,6 +19,7 @@ import com.tencent.bk.sdk.iam.dto.ExpressionWithResourceDTO;
 import com.tencent.bk.sdk.iam.dto.InstanceDTO;
 import com.tencent.bk.sdk.iam.dto.SubjectDTO;
 import com.tencent.bk.sdk.iam.dto.UserGroupDTO;
+import com.tencent.bk.sdk.iam.dto.V2QueryPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionDTO;
 import com.tencent.bk.sdk.iam.dto.action.ActionPolicyDTO;
 import com.tencent.bk.sdk.iam.dto.expression.ExpressionDTO;
@@ -40,27 +30,28 @@ import com.tencent.bk.sdk.iam.dto.resource.DependencyResourceInfoDTO;
 import com.tencent.bk.sdk.iam.dto.resource.ResourceDTO;
 import com.tencent.bk.sdk.iam.dto.response.QueryPolicyWithDependencyResourceResponseDTO;
 import com.tencent.bk.sdk.iam.dto.response.ResponseDTO;
+import com.tencent.bk.sdk.iam.exception.IamException;
 import com.tencent.bk.sdk.iam.service.HttpClientService;
 import com.tencent.bk.sdk.iam.service.PolicyService;
+import com.tencent.bk.sdk.iam.util.AuthCacheUtil;
 import com.tencent.bk.sdk.iam.util.AuthRequestContext;
 import com.tencent.bk.sdk.iam.util.JsonUtil;
 import com.tencent.bk.sdk.iam.util.ResponseUtil;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class PolicyServiceImpl implements PolicyService {
 
     private final IamConfiguration iamConfiguration;
     private final HttpClientService httpClientService;
-
-    private final Cache<String, Boolean> permissionCache = CacheBuilder.newBuilder()
-            .maximumSize(50000)
-            .expireAfterWrite(1, TimeUnit.MINUTES)
-            .build();
 
     public PolicyServiceImpl(IamConfiguration iamConfiguration, HttpClientService httpClientService) {
         this.iamConfiguration = iamConfiguration;
@@ -231,31 +222,32 @@ public class PolicyServiceImpl implements PolicyService {
     public Boolean verifyPermissions(V2QueryPolicyDTO queryPolicyDTO) {
         try {
             String cacheKey = getPermissionCacheKey(queryPolicyDTO);
-            Boolean cacheResult = permissionCache.getIfPresent(cacheKey);
-            if (cacheResult == null) {
-                String responseStr = httpClientService.doHttpPost(getVerifyPermissionsUrl(), queryPolicyDTO);
-                if (StringUtils.isNotBlank(responseStr)) {
-                    log.debug("verify permissions response|{}", responseStr);
-                    ResponseDTO<Map<String, Boolean>> responseInfo = JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {
-                    });
-                    if (responseInfo != null) {
-                        ResponseUtil.checkResponse(responseInfo);
-                        Boolean requestResult = responseInfo.getData().get("allowed");
-                        if (requestResult) {
-                            permissionCache.put(cacheKey, true);
-                        }
-                        return requestResult;
-                    }
-                } else {
-                    log.warn("verify permissions got empty response!");
-                }
-            } else {
-                return cacheResult;
-            }
+            return AuthCacheUtil.cachePermission(cacheKey, () -> verifyPermissionsFromIam(queryPolicyDTO));
         } catch (IamException iamException) {
             throw iamException;
         } catch (Exception e) {
             log.error("verify permissions response failed", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Boolean verifyPermissionsFromIam(V2QueryPolicyDTO queryPolicyDTO) {
+        try {
+            String responseStr = httpClientService.doHttpPost(getVerifyPermissionsUrl(), queryPolicyDTO);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("verify permissions response|{}", responseStr);
+                ResponseDTO<Map<String, Boolean>> responseInfo =
+                        JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<Map<String, Boolean>>>() {});
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData().get("allowed");
+                }
+            } else {
+                log.warn("verify permissions got empty response!");
+            }
+        } catch (IamException iamException) {
+            throw iamException;
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return null;
