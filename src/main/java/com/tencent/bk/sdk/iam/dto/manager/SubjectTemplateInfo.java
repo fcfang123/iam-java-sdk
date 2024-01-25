@@ -1,7 +1,9 @@
 package com.tencent.bk.sdk.iam.dto.manager;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class SubjectTemplateInfo {
     private Integer id;
     /**
