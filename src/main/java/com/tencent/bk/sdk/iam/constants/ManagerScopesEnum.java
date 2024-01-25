@@ -21,6 +21,10 @@ public enum ManagerScopesEnum {
      */
     DEPARTMENT("department"),
     /**
+     * 人员模板
+     */
+    TEMPLATE("template"),
+    /**
      * 所有类型
      */
     ALL("*");

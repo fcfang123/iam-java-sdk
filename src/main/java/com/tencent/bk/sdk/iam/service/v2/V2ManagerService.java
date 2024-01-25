@@ -14,7 +14,6 @@ package com.tencent.bk.sdk.iam.service.v2;
 import com.tencent.bk.sdk.iam.dto.CallbackApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationCreateDTO;
 import com.tencent.bk.sdk.iam.dto.GradeManagerApplicationUpdateDTO;
-import com.tencent.bk.sdk.iam.dto.PageInfoDTO;
 import com.tencent.bk.sdk.iam.dto.V2PageInfoDTO;
 import com.tencent.bk.sdk.iam.dto.action.GroupAction;
 import com.tencent.bk.sdk.iam.dto.application.ApplicationDTO;
@@ -28,9 +27,11 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.GroupMemberRenewApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchTemplatesDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
+import com.tencent.bk.sdk.iam.dto.manager.vo.SubjectTemplateVO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
@@ -92,6 +93,11 @@ public interface V2ManagerService {
      * 查询分级管理员下用户组列表
      */
     public V2ManagerRoleGroupVO getGradeManagerRoleGroupV2(String gradeManagerId, SearchGroupDTO searchGroupDTO, V2PageInfoDTO pageInfoDTO);
+
+    /**
+     * 查询分级管理员下人员模板列表
+     */
+    public SubjectTemplateVO getGradeManagerRoleTemplate(String gradeManagerId, SearchTemplatesDTO searchTemplatesDTO, V2PageInfoDTO pageInfoDTO);
 
     /**
      * 创建分级管理员申请

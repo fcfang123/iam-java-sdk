@@ -31,10 +31,12 @@ import com.tencent.bk.sdk.iam.dto.manager.dto.GroupMemberRenewApplicationDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerMemberGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.ManagerRoleGroupDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.SearchGroupDTO;
+import com.tencent.bk.sdk.iam.dto.manager.dto.SearchTemplatesDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.dto.UpdateSubsetManagerDTO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.CreateVo;
 import com.tencent.bk.sdk.iam.dto.manager.vo.ManagerGroupMemberVo;
+import com.tencent.bk.sdk.iam.dto.manager.vo.SubjectTemplateVO;
 import com.tencent.bk.sdk.iam.dto.manager.vo.V2ManagerRoleGroupVO;
 import com.tencent.bk.sdk.iam.dto.response.CallbackApplicationResponese;
 import com.tencent.bk.sdk.iam.dto.response.GradeManagerApplicationResponse;
@@ -531,6 +533,38 @@ public class V2ManagerServiceImpl implements V2ManagerService {
             throw iamException;
         } catch (Exception e) {
             log.error("get subeset manager role group failed", e);
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    @Override
+    public SubjectTemplateVO getGradeManagerRoleTemplate(String gradeManagerId, SearchTemplatesDTO searchTemplatesDTO, V2PageInfoDTO pageInfoDTO) {
+        try {
+            AuthRequestContext.setRequestName("V2_MANAGER_GRADE_TEMPLATE_GET");
+            String url = v2BuildURLPage(String.format(V2IamUri.V2_MANAGER_GRADE_TEMPLATE_GET, iamConfiguration.getSystemId(), gradeManagerId), pageInfoDTO);
+            if (searchTemplatesDTO != null) {
+                String s = HttpUtils.joinParams(searchTemplatesDTO);
+                if (StringUtils.isNotBlank(s))
+                    url = url.concat("&".concat(s));
+            }
+            String responseStr = apigwHttpClientService.doHttpGet(url);
+            if (StringUtils.isNotBlank(responseStr)) {
+                log.debug("get grade manager role template response|{}", responseStr);
+                ResponseDTO<SubjectTemplateVO> responseInfo =
+                    JsonUtil.fromJson(responseStr, new TypeReference<ResponseDTO<SubjectTemplateVO>>() {
+                    });
+                if (responseInfo != null) {
+                    ResponseUtil.checkResponse(responseInfo);
+                    return responseInfo.getData();
+                }
+            } else {
+                log.warn("get grade manager role template response got empty response!");
+            }
+        } catch (IamException iamException) {
+            throw iamException;
+        } catch (Exception e) {
+            log.error("get grade manager role template response failed", e);
             throw new RuntimeException(e);
         }
         return null;
