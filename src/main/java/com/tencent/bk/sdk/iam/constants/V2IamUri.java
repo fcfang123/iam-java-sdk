@@ -38,7 +38,7 @@ public class V2IamUri {
     public static final String V2_VERIFY_GROUP_VALID_DEPARTMENT = "/api/v2/open/management/systems/%s/departments/%s/groups/belong/?group_ids=%s";
     public static final String V2_SUBSET_GRADE_MANAGER_GROUP_GET = "/api/v2/open/management/systems/%s/subset_managers/%s/groups/";
     public static final String V2_MANAGER_GRADE_GROUP_GET = "/api/v2/open/management/systems/%s/grade_managers/%s/groups/";
-    public static final String V2_MANAGER_GRADE_TEMPLATE_GET = "api/v2/open/management/systems/%s/grade_managers/%s/subject_templates/";
+    public static final String V2_MANAGER_GRADE_TEMPLATE_GET = "/api/v2/open/management/systems/%s/grade_managers/%s/subject_templates/";
 
     // 创建分级管理员
     public static final String V2_MANAGER_ROLE_CREATE = "/api/v2/open/management/systems/%s/grade_managers/";
