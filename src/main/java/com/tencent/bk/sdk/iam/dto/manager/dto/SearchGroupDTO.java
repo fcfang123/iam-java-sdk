@@ -7,8 +7,11 @@ import lombok.Data;
 @Data
 @Builder
 public class SearchGroupDTO {
-    /*分级管理员是否继承查询子集管理员的用户组, 默认是*/
+    /*该值若为true,会查询所有的用户组；若为false，只会查询分级管理员级别的用户组，不包含二级管理员的用户组，不填默认true*/
     private Boolean inherit;
+    /*该值若为true，会查询所有的用户组，若为false，只会查询二级管理员的用户组的组*/
+    @JsonProperty("only_inherit")
+    private String onlyInherit;
     /*操作id筛选, 只支持自定义操作*/
     @JsonProperty("action_id")
     private String actionId;
