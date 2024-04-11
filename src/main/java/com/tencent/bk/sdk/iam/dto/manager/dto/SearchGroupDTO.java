@@ -11,7 +11,7 @@ public class SearchGroupDTO {
     private Boolean inherit;
     /*该值若为true，会查询所有的用户组，若为false，只会查询二级管理员的用户组的组*/
     @JsonProperty("only_inherit")
-    private String onlyInherit;
+    private Boolean onlyInherit;
     /*操作id筛选, 只支持自定义操作*/
     @JsonProperty("action_id")
     private String actionId;
