@@ -15,6 +15,6 @@
 
 - [新增] 增加人员模板操作相关接口 [链接](https://github.com/TencentBlueKing/iam-java-sdk/issues/89)
 
-## IAM v1.0.4
+## IAM v1.0.6
 
 - [优化] 优化获取分级管理员的用户组列表 [链接](https://github.com/TencentBlueKing/iam-java-sdk/issues/94)
